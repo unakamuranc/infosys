@@ -322,7 +322,14 @@
                     currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + currentBoxSize + '）</div>';
                     currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
                     for (let i = 0; i < Math.min(boxCount, 10); i++) {
-                        currentHtml += '<div class="group" style="background-color: #ffecb3; border-color: #f57f17;">サイズ' + currentBoxSize + '</div>';
+                        currentHtml += '<div class="big-box" style="background-color: #ffecb3; border: 3px solid #f57f17; border-radius: 12px; padding: 8px; margin: 5px; position: relative;">';
+                        currentHtml += '<div class="big-box-label" style="position: absolute; top: -12px; left: 10px; background-color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-radius: 4px;">サイズ' + currentBoxSize + '</div>';
+                        currentHtml += '<div class="small-boxes-container" style="display: flex; flex-wrap: wrap; gap: 3px; align-items: center; justify-content: center;">';
+                        for (let j = 0; j < radix; j++) {
+                            currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b; font-size: 10px;">' + prevLevelName + '</div>';
+                        }
+                        currentHtml += '</div>';
+                        currentHtml += '</div>';
                     }
                     if (boxCount > 10) {
                         currentHtml += ' <div style="margin: 10px; font-weight: bold; align-self: center;">... (合計' + boxCount + '箱)</div>';
@@ -337,8 +344,9 @@
                 currentHtml += '<div style="flex: 1; padding: 10px; background-color: #fff3e0; border-left: 4px solid #ff9800; border-radius: 5px;">';
                 currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">余った' + prevLevelName + '箱</div>';
                 const remainingPrevBoxes = availableBoxes % radix;
+                // 常にカラムを表示し、余りがない場合もメッセージを表示
+                currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 3px; min-height: 40px; align-items: center;">';
                 if (remainingPrevBoxes > 0) {
-                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
                     for (let i = 0; i < Math.min(remainingPrevBoxes, 10); i++) {
                         currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">' + prevLevelName + '</div>';
                     }
@@ -347,10 +355,10 @@
                     } else {
                         currentHtml += ' <div style="margin: 5px; font-size: 12px;">(' + remainingPrevBoxes + '箱)</div>';
                     }
-                    currentHtml += '</div>';
                 } else {
-                    currentHtml += '<div style="color: #666; font-style: italic;">余りはありません</div>';
+                    currentHtml += '<div style="color: #666; font-style: italic;">余った箱はありません</div>';
                 }
+                currentHtml += '</div>';
                 currentHtml += '</div>';
                 
                 currentHtml += '</div>';
@@ -424,7 +432,7 @@
             finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #f0f0f0; font-size: 12px;"></td>';
             for (let i = 0; i < digitInfo.length; i++) {
                 const info = digitInfo[i];
-                const sizeLabel = info.level === 0 ? '1' : (radix + '').repeat(info.level) + '1';
+                const sizeLabel = info.level === 0 ? '1' : (radix + '×').repeat(info.level) + '1';
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #f0f0f0; font-size: 12px;">' + sizeLabel + '</td>';
             }
             finalResultHtml += '</tr>';
@@ -512,7 +520,7 @@
             finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #f0f0f0; font-size: 12px;"></td>';
             for (let i = 0; i < digitValues.length; i++) {
                 const info = digitValues[i];
-                const positionLabel = info.power === 0 ? '1' : (radix + '').repeat(info.power) + '1';
+                const positionLabel = info.power === 0 ? '1' : (radix + '×').repeat(info.power) + '1';
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #f0f0f0; font-size: 12px;">' + positionLabel + '</td>';
             }
             finalResultHtml += '</tr>';
