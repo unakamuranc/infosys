@@ -1,31 +1,132 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ni–@‚Æ10i–@‚Ì‘ŠŒİ•ÏŠ·</title>
+    <title>Né€²æ³•ã¨10é€²æ³•ã®ç›¸äº’å¤‰æ›</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
-        .container { max-width: 1200px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1, h2 { color: #333; text-align: center; }
-        .controls { display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
-        .control-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        input, button { padding: 10px; font-size: 16px; border: 2px solid #ddd; border-radius: 5px; }
-        button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        .converter-section { margin: 30px 0; padding: 20px; border: 2px solid #e0e0e0; border-radius: 10px; background-color: #fafafa; }
-        .visualization { margin: 20px 0; padding: 20px; background-color: white; border-radius: 5px; min-height: 200px; }
-        .step-info { margin: 10px 0; padding: 10px; background-color: #e8f5e8; border-left: 4px solid #4CAF50; font-size: 14px; }
-        .result { font-size: 18px; font-weight: bold; color: #333; text-align: center; margin: 15px 0; padding: 15px; background-color: #f0f8ff; border: 2px solid #4CAF50; border-radius: 8px; }
-        .error { color: #f44336; background-color: #ffebee; border-color: #f44336; }
-        .tab-container { margin: 20px 0; }
-        .tab-buttons { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
-        .tab-button { background-color: #f5f5f5; border: none; padding: 15px 30px; font-size: 16px; color: #333; cursor: pointer; border-radius: 8px 8px 0 0; margin-right: 5px; }
-        .tab-button.active { background-color: white; font-weight: bold; border-top: 2px solid #4CAF50; }
-        .tab-button:hover:not(.active) { background-color: #e8f5e8; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .unit { display: inline-block; width: 20px; height: 20px; background-color: #4CAF50; margin: 2px; border-radius: 3px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .converter-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: #fafafa;
+        }
+        .visualization {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            min-height: 200px;
+        }
+        .step-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+            font-size: 14px;
+        }
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+        }
+        .error {
+            color: #f44336;
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+        .tab-container {
+            margin: 20px 0;
+        }
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            background-color: #f5f5f5;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+        }
+        .tab-button.active {
+            background-color: white;
+            font-weight: bold;
+            border-top: 2px solid #4CAF50;
+        }
+        .tab-button:hover:not(.active) {
+            background-color: #e8f5e8;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .unit {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #4CAF50;
+            margin: 2px;
+            border-radius: 3px;
+        }
         .group {
             display: inline-block;
             margin: 5px;
@@ -38,68 +139,42 @@
             min-width: 60px;
             vertical-align: top;
         }
-        .big-box {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px;
-            border: 3px solid;
-            border-radius: 12px;
-            vertical-align: top;
-            position: relative;
-        }
-        .big-box-label {
-            position: absolute;
-            top: -12px;
-            left: 10px;
-            background-color: white;
-            padding: 2px 8px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 4px;
-        }
-        .small-boxes-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Ni–@‚Æ10i–@‚Ì‘ŠŒİ•ÏŠ·</h1>
+        <h1>Né€²æ³•ã¨10é€²æ³•ã®ç›¸äº’å¤‰æ›</h1>
         
         <div class="controls">
             <div class="control-group">
-                <label for="radix">i–@ (N):</label>
+                <label for="radix">é€²æ³• (N):</label>
                 <input type="number" id="radix" min="2" max="16" value="2" />
             </div>
             <div class="control-group">
-                <label for="decimalInput">10i” (k):</label>
+                <label for="decimalInput">10é€²æ•° (k):</label>
                 <input type="number" id="decimalInput" min="0" max="1000" value="13" />
             </div>
             <div class="control-group">
-                <label for="radixInput">Ni”:</label>
-                <input type="text" id="radixInput" placeholder="—á: 1101" />
+                <label for="radixInput">Né€²æ•°:</label>
+                <input type="text" id="radixInput" placeholder="ä¾‹: 1101" />
             </div>
         </div>
 
         <div class="tab-container">
             <div class="tab-buttons">
-                <button class="tab-button active" onclick="switchTab('decimal-to-radix')">10i–@ ¨ Ni–@‚Ö‚Ì•ÏŠ·</button>
-                <button class="tab-button" onclick="switchTab('radix-to-decimal')">Ni–@ ¨ 10i–@‚Ö‚Ì•ÏŠ·</button>
+                <button class="tab-button active" onclick="switchTab('decimal-to-radix')">10é€²æ³•  Né€²æ³•ã¸ã®å¤‰æ›</button>
+                <button class="tab-button" onclick="switchTab('radix-to-decimal')">Né€²æ³•  10é€²æ³•ã¸ã®å¤‰æ›</button>
             </div>
 
             <div id="decimal-to-radix" class="tab-content active converter-section">
-                <button onclick="convertDecimalToRadix()">10i”‚ğNi”‚É•ÏŠ·</button>
+                <button onclick="convertDecimalToRadix()">10é€²æ•°ã‚’Né€²æ•°ã«å¤‰æ›</button>
                 <div id="decimal-to-radix-steps"></div>
                 <div id="decimal-to-radix-visualization" class="visualization"></div>
                 <div id="decimal-to-radix-result"></div>
             </div>
 
             <div id="radix-to-decimal" class="tab-content converter-section">
-                <button onclick="convertRadixToDecimal()">Ni”‚ğ10i”‚É•ÏŠ·</button>
+                <button onclick="convertRadixToDecimal()">Né€²æ•°ã‚’10é€²æ•°ã«å¤‰æ›</button>
                 <div id="radix-to-decimal-steps"></div>
                 <div id="radix-to-decimal-visualization" class="visualization"></div>
                 <div id="radix-to-decimal-result"></div>
@@ -113,36 +188,35 @@
             const decimal = parseInt(document.getElementById('decimalInput').value);
             
             if (radix < 2 || radix > 16) {
-                showError('decimal-to-radix-result', 'N‚Í2‚©‚ç16‚ÌŠÔ‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢');
+                showError('decimal-to-radix-result', 'Nã¯2ã‹ã‚‰16ã®é–“ã§æŒ‡å®šã—ã¦ãã ã•ã„');
                 return;
             }
             
             if (decimal < 0) {
-                showError('decimal-to-radix-result', '³‚Ì®”‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢');
+                showError('decimal-to-radix-result', 'æ­£ã®æ•´æ•°ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„');
                 return;
             }
 
             visualizeDecimalToRadix(decimal, radix);
         }
-
         function convertRadixToDecimal() {
             const radix = parseInt(document.getElementById('radix').value);
             const radixStr = document.getElementById('radixInput').value.trim();
             
             if (radix < 2 || radix > 16) {
-                showError('radix-to-decimal-result', 'N‚Í2‚©‚ç16‚ÌŠÔ‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢');
+                showError('radix-to-decimal-result', 'Nã¯2ã‹ã‚‰16ã®é–“ã§æŒ‡å®šã—ã¦ãã ã•ã„');
                 return;
             }
             
             if (!radixStr) {
-                showError('radix-to-decimal-result', 'Ni”‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢');
+                showError('radix-to-decimal-result', 'Né€²æ•°ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„');
                 return;
             }
 
             const validChars = '0123456789ABCDEF'.slice(0, radix);
             for (let char of radixStr.toUpperCase()) {
                 if (!validChars.includes(char)) {
-                    showError('radix-to-decimal-result', radix + 'i–@‚Å‚Íg—p‚Å‚«‚È‚¢•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·: ' + char);
+                    showError('radix-to-decimal-result', radix + 'é€²æ³•ã§ã¯ä½¿ç”¨ã§ããªã„æ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã¾ã™: ' + char);
                     return;
                 }
             }
@@ -158,20 +232,18 @@
             stepsDiv.innerHTML = '';
             visualDiv.innerHTML = '';
             
-            // ƒXƒeƒbƒv1: ŒÂ•Ê‚Ì•¨‚ğ•\¦
-            let stepHtml = '<div class="step-info">ƒXƒeƒbƒv1: ' + decimal + 'ŒÂ‚Ì•¨‚ğ•\Œ»</div>';
+            let stepHtml = '<div class="step-info">ã‚¹ãƒ†ãƒƒãƒ—1: ' + decimal + 'å€‹ã®ç‰©ã‚’è¡¨ç¾</div>';
             stepsDiv.innerHTML = stepHtml;
             
-            // ’PˆÊ‚ğ•`‰æ
-            let unitsHtml = '<div>•¨: ';
-            const maxUnitsToShow = 50; // •\¦§ŒÀ
+            let unitsHtml = '<div>ç‰©: ';
+            const maxUnitsToShow = 50;
             for (let i = 0; i < Math.min(decimal, maxUnitsToShow); i++) {
                 unitsHtml += '<span class="unit"></span>';
             }
             if (decimal > maxUnitsToShow) {
-                unitsHtml += ' <span>... (‡Œv' + decimal + 'ŒÂ)</span>';
+                unitsHtml += ' <span>... (åˆè¨ˆ' + decimal + 'å€‹)</span>';
             }
-            unitsHtml += '</div><p>‡Œv: ' + decimal + 'ŒÂ</p>';
+            unitsHtml += '</div><p>åˆè¨ˆ: ' + decimal + 'å€‹</p>';
             visualDiv.innerHTML = unitsHtml;
             
             setTimeout(() => {
@@ -185,55 +257,51 @@
             const remainder = remaining % boxSize;
             
             const currentBoxSize = Math.pow(radix, level + 1);
-            const currentLevelName = 'ƒTƒCƒY' + currentBoxSize;
+            const currentLevelName = 'ã‚µã‚¤ã‚º' + currentBoxSize;
             
-            stepHtml += '<div class="step-info">ƒXƒeƒbƒv' + (level + 2) + ': ' + currentLevelName + '‚Ì” ‚É' + radix + '” ‚¸‚Â‹l‚ß‚é</div>';
+            stepHtml += '<div class="step-info">ã‚¹ãƒ†ãƒƒãƒ—' + (level + 2) + ': ' + currentLevelName + 'ã®ç®±ã«' + radix + 'ç®±ãšã¤è©°ã‚ã‚‹</div>';
             stepsDiv.innerHTML = stepHtml;
             
             let currentHtml = '<div style="margin: 15px 0; padding: 10px; background-color: #f0f8ff; border-left: 4px solid #2196f3;">';
-            currentHtml += '<strong>' + currentLevelName + '‚Ì” ì‚è:</strong><br>';
+            currentHtml += '<strong>' + currentLevelName + 'ã®ç®±ä½œã‚Š:</strong><br>';
             
             if (level === 0) {
-                // ƒŒƒxƒ‹0: ŒÂ•Ê‚Ì•¨‚ğƒTƒCƒY1‚Ì” iNŒÂ“ü‚èj‚É‹l‚ß‚é
-                currentHtml += remaining + 'ŒÂ‚Ì•¨‚ğ' + radix + 'ŒÂ‚¸‚Â” ‚É‹l‚ß‚é ¨ ƒTƒCƒY' + radix + '‚Ì” ‚ª' + boxCount + '” ‚Å‚«‚é, —]‚è' + remainder + 'ŒÂ@@' + remaining + '€' + radix + ' = ' + boxCount + ' —]‚è ' + remainder + '<br>';
+                currentHtml += remaining + 'å€‹ã®ç‰©ã‚’' + radix + 'å€‹ãšã¤ç®±ã«è©°ã‚ã‚‹  ã‚µã‚¤ã‚º' + radix + 'ã®ç®±ãŒ' + boxCount + 'ç®±ã§ãã‚‹, ä½™ã‚Š' + remainder + 'å€‹ã€€ã€€' + remaining + '' + radix + ' = ' + boxCount + ' ä½™ã‚Š ' + remainder + '<br>';
                 
-                // ” ‚Æ—]‚è‚ğ‰¡•À‚Ñ‚Å•\¦
                 currentHtml += '<div style="margin: 15px 0; display: flex; gap: 20px; align-items: flex-start;">';
                 
-                // ƒTƒCƒYN‚Ì” ‚ğ•\¦
                 currentHtml += '<div style="flex: 1; padding: 10px; background-color: #e8f5e8; border-left: 4px solid #4CAF50; border-radius: 5px;">';
                 if (boxCount > 0) {
-                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ì‚ç‚ê‚½” iƒTƒCƒY' + radix + 'j</div>';
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ä½œã‚‰ã‚ŒãŸç®±ï¼ˆã‚µã‚¤ã‚º' + radix + 'ï¼‰</div>';
                     currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
                     for (let i = 0; i < Math.min(boxCount, 10); i++) {
-                        currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">ƒTƒCƒY' + radix + '</div>';
+                        currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">ã‚µã‚¤ã‚º' + radix + '</div>';
                     }
                     if (boxCount > 10) {
-                        currentHtml += ' <div style="margin: 10px; font-weight: bold; align-self: center;">... (‡Œv' + boxCount + '” )</div>';
+                        currentHtml += ' <div style="margin: 10px; font-weight: bold; align-self: center;">... (åˆè¨ˆ' + boxCount + 'ç®±)</div>';
                     }
                     currentHtml += '</div>';
                 } else {
-                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ì‚ç‚ê‚½” iƒTƒCƒY' + radix + 'j</div>';
-                    currentHtml += '<div style="color: #666; font-style: italic;">” ‚Íì‚ç‚ê‚Ü‚¹‚ñ‚Å‚µ‚½</div>';
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ä½œã‚‰ã‚ŒãŸç®±ï¼ˆã‚µã‚¤ã‚º' + radix + 'ï¼‰</div>';
+                    currentHtml += '<div style="color: #666; font-style: italic;">ç®±ã¯ä½œã‚‰ã‚Œã¾ã›ã‚“ã§ã—ãŸ</div>';
                 }
                 currentHtml += '</div>';
                 
-                // —]‚è‚ÌŒÂ•Ê‚Ì•¨‚ğ•\¦ií‚É•\¦j
                 currentHtml += '<div style="flex: 1; padding: 10px; background-color: #fff3e0; border-left: 4px solid #ff9800; border-radius: 5px;">';
-                currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">—]‚Á‚½•¨</div>';
+                currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">ä½™ã£ãŸç‰©</div>';
                 if (remainder > 0) {
                     currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
                     for (let i = 0; i < Math.min(remainder, 15); i++) {
                         currentHtml += '<span class="unit"></span>';
                     }
                     if (remainder > 15) {
-                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">... (‡Œv' + remainder + 'ŒÂ)</div>';
+                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">... (åˆè¨ˆ' + remainder + 'å€‹)</div>';
                     } else {
-                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">(' + remainder + 'ŒÂ)</div>';
+                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">(' + remainder + 'å€‹)</div>';
                     }
                     currentHtml += '</div>';
                 } else {
-                    currentHtml += '<div style="color: #666; font-style: italic;">—]‚è‚Í‚ ‚è‚Ü‚¹‚ñ</div>';
+                    currentHtml += '<div style="color: #666; font-style: italic;">ä½™ã‚Šã¯ã‚ã‚Šã¾ã›ã‚“</div>';
                 }
                 currentHtml += '</div>';
                 
@@ -244,7 +312,6 @@
             
             visualDiv.innerHTML = previousHtml + currentHtml;
             
-            // Ÿ‚ÌƒŒƒxƒ‹‚Éi‚Ş‚©ƒ`ƒFƒbƒN
             if (boxCount >= radix && level < 5) {
                 setTimeout(() => {
                     visualizeHierarchicalBoxing(remaining, radix, level + 1, stepHtml, previousHtml + currentHtml, stepsDiv, visualDiv, resultDiv);
@@ -257,7 +324,7 @@
         }
 
         function showFinalResult(decimal, radix, stepHtml, previousHtml, stepsDiv, visualDiv, resultDiv) {
-            stepHtml += '<div class="step-info">ÅIƒXƒeƒbƒv: ŠeƒTƒCƒY‚Ì” ‚ÌŒÂ”‚©‚ç' + radix + 'i–@‚ğ‹‚ß‚é</div>';
+            stepHtml += '<div class="step-info">æœ€çµ‚ã‚¹ãƒ†ãƒƒãƒ—: å„ã‚µã‚¤ã‚ºã®ç®±ã®å€‹æ•°ã‹ã‚‰' + radix + 'é€²æ³•ã‚’æ±‚ã‚ã‚‹</div>';
             
             let tempDecimal = decimal;
             let digits = [];
@@ -284,15 +351,17 @@
             
             const result = digits.join('');
             
+            let calculationParts = [];
             let calculationValues = [];
             for (let i = 0; i < digitInfo.length; i++) {
                 const info = digitInfo[i];
                 const value = info.digit * info.boxSize;
+                calculationParts.push(info.digit + '' + radix + '^' + info.level);
                 calculationValues.push(value);
             }
             
             let finalResultHtml = '<div style="margin: 15px 0; padding: 15px; background-color: #f9f9f9; border: 2px solid #333;">';
-            finalResultHtml += '<strong>ŠeŒ…‚Ì’l‚Æ‡Œv:</strong><br><br>';
+            finalResultHtml += '<strong>å„æ¡ã®å€¤ã¨åˆè¨ˆ:</strong><br><br>';
             
             finalResultHtml += '<div style="text-align: center; margin: 20px 0; font-size: 18px; font-weight: bold;">';
             finalResultHtml += calculationValues.join(' + ') + ' = ' + decimal;
@@ -304,26 +373,26 @@
             finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #f0f0f0; font-size: 12px;"></td>';
             for (let i = 0; i < digitInfo.length; i++) {
                 const info = digitInfo[i];
-                const sizeLabel = info.level === 0 ? '1' : (radix + '~').repeat(info.level) + '1';
+                const sizeLabel = info.level === 0 ? '1' : (radix + '').repeat(info.level) + '1';
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #f0f0f0; font-size: 12px;">' + sizeLabel + '</td>';
             }
             finalResultHtml += '</tr>';
             
             finalResultHtml += '<tr>';
-            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">” </td>';
+            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">ç®±</td>';
             for (let i = 0; i < digitInfo.length; i++) {
                 const info = digitInfo[i];
                 if (info.level === 0) {
-                    finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; border: 2px dotted #999;">” ‚È‚µ</td>';
+                    finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; border: 2px dotted #999;">ç®±ãªã—</td>';
                 } else {
-                    const levelName = 'ƒTƒCƒY' + info.boxSize;
+                    const levelName = 'ã‚µã‚¤ã‚º' + info.boxSize;
                     finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #e1f5fe;">' + levelName + '</td>';
                 }
             }
             finalResultHtml += '</tr>';
             
             finalResultHtml += '<tr>';
-            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">ŒÂ”</td>';
+            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">å€‹æ•°</td>';
             for (let i = 0; i < digitInfo.length; i++) {
                 const info = digitInfo[i];
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; font-weight: bold;">' + info.digit + '</td>';
@@ -332,7 +401,7 @@
             
             finalResultHtml += '</table>';
             
-            finalResultHtml += '<div style="text-align: center; margin-top: 20px; font-size: 18px;"><strong>‚µ‚½‚ª‚Á‚Ä: ' + decimal + '(10) = ' + result + '(' + radix + ')</strong></div>';
+            finalResultHtml += '<div style="text-align: center; margin-top: 20px; font-size: 18px;"><strong>ã—ãŸãŒã£ã¦: ' + decimal + '(10) = ' + result + '(' + radix + ')</strong></div>';
             finalResultHtml += '</div>';
             
             stepsDiv.innerHTML = stepHtml;
@@ -375,12 +444,12 @@
                 });
             }
             
-            let stepHtml = '<div class="step-info">ƒXƒeƒbƒv1: ' + radixStr + '(' + radix + ')‚ÌŠeŒ…‚ğ•ªÍ</div>';
-            stepHtml += '<div class="step-info">ƒXƒeƒbƒv2: ŠeŒ…‚ÌˆÊ’u‰¿’l‚ğŒvZ</div>';
-            stepHtml += '<div class="step-info">ƒXƒeƒbƒv3: ŠeŒ…‚Ì’l‚Æ‡Œv‚ğŒvZ</div>';
+            let stepHtml = '<div class="step-info">ã‚¹ãƒ†ãƒƒãƒ—1: ' + radixStr + '(' + radix + ')ã®å„æ¡ã‚’åˆ†æ</div>';
+            stepHtml += '<div class="step-info">ã‚¹ãƒ†ãƒƒãƒ—2: å„æ¡ã®ä½ç½®ä¾¡å€¤ã‚’è¨ˆç®—</div>';
+            stepHtml += '<div class="step-info">ã‚¹ãƒ†ãƒƒãƒ—3: å„æ¡ã®å€¤ã¨åˆè¨ˆã‚’è¨ˆç®—</div>';
             
             let finalResultHtml = '<div style="margin: 15px 0; padding: 15px; background-color: #f9f9f9; border: 2px solid #333;">';
-            finalResultHtml += '<strong>ŠeŒ…‚Ì’l‚Æ‡Œv:</strong><br><br>';
+            finalResultHtml += '<strong>å„æ¡ã®å€¤ã¨åˆè¨ˆ:</strong><br><br>';
             
             finalResultHtml += '<div style="text-align: center; margin: 20px 0; font-size: 18px; font-weight: bold;">';
             finalResultHtml += digitValues.map(d => d.value).join(' + ') + ' = ' + total;
@@ -392,13 +461,13 @@
             finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #f0f0f0; font-size: 12px;"></td>';
             for (let i = 0; i < digitValues.length; i++) {
                 const info = digitValues[i];
-                const positionLabel = info.power === 0 ? '1' : (radix + '~').repeat(info.power) + '1';
+                const positionLabel = info.power === 0 ? '1' : (radix + '').repeat(info.power) + '1';
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #f0f0f0; font-size: 12px;">' + positionLabel + '</td>';
             }
             finalResultHtml += '</tr>';
             
             finalResultHtml += '<tr>';
-            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">ˆÊ’u‰¿’l</td>';
+            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">ä½ç½®ä¾¡å€¤</td>';
             for (let i = 0; i < digitValues.length; i++) {
                 const info = digitValues[i];
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #e1f5fe;">' + info.position + '</td>';
@@ -406,7 +475,7 @@
             finalResultHtml += '</tr>';
             
             finalResultHtml += '<tr>';
-            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">Ni–@‚ÌŒ…</td>';
+            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">Né€²æ³•ã®æ¡</td>';
             for (let i = 0; i < digitValues.length; i++) {
                 const info = digitValues[i];
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; font-weight: bold;">' + info.digitChar + '</td>';
@@ -414,7 +483,7 @@
             finalResultHtml += '</tr>';
             
             finalResultHtml += '<tr>';
-            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">ŠeŒ…‚Ì’l</td>';
+            finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px; background-color: #e8f5e8; font-weight: bold; text-align: center;">å„æ¡ã®å€¤</td>';
             for (let i = 0; i < digitValues.length; i++) {
                 const info = digitValues[i];
                 finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; font-weight: bold; color: #d32f2f;">' + info.value + '</td>';
@@ -423,7 +492,7 @@
             
             finalResultHtml += '</table>';
             
-            finalResultHtml += '<div style="text-align: center; margin-top: 20px; font-size: 18px;"><strong>‚µ‚½‚ª‚Á‚Ä: ' + radixStr + '(' + radix + ') = ' + total + '(10)</strong></div>';
+            finalResultHtml += '<div style="text-align: center; margin-top: 20px; font-size: 18px;"><strong>ã—ãŸãŒã£ã¦: ' + radixStr + '(' + radix + ') = ' + total + '(10)</strong></div>';
             finalResultHtml += '</div>';
             
             stepsDiv.innerHTML = stepHtml;
