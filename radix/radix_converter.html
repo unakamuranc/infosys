@@ -139,6 +139,67 @@
             min-width: 60px;
             vertical-align: top;
         }
+        /* 表示モード切り替えスイッチのスタイル */
+        .display-mode-switch {
+            display: flex;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .mode-button {
+            background-color: #f5f5f5;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .mode-button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .mode-button:hover:not(.active) {
+            background-color: #e8f5e8;
+        }
+        /* ボール表示用のスタイル */
+        .ball-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin: 2px;
+        }
+        .ball {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #81C784, #4CAF50, #2E7D32);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            display: inline-block;
+        }
+        .big-ball-container {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 2px;
+            padding: 4px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .ball-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 6px;
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            margin: 5px;
+            min-width: 60px;
+            justify-content: center;
+            vertical-align: top;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +218,13 @@
             <div class="control-group">
                 <label for="radixInput">N進数:</label>
                 <input type="text" id="radixInput" placeholder="例: 1101" />
+            </div>
+            <div class="control-group">
+                <label>表示モード:</label>
+                <div class="display-mode-switch">
+                    <button id="textMode" class="mode-button active" onclick="setDisplayMode('text')">テキスト</button>
+                    <button id="ballMode" class="mode-button" onclick="setDisplayMode('balls')">ボール</button>
+                </div>
             </div>
         </div>
 
@@ -183,6 +251,45 @@
     </div>
 
     <script>
+        let displayMode = 'text'; // 'text' or 'balls'
+
+        function setDisplayMode(mode) {
+            displayMode = mode;
+            // アクティブボタンの切り替え
+            document.querySelectorAll('.mode-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[onclick="setDisplayMode('${mode}')"]`).classList.add('active');
+            
+            // 既存の結果を再表示
+            const decimalInput = document.getElementById('decimalInput').value;
+            const radixInput = document.getElementById('radixInput').value.trim();
+            
+            if (decimalInput) {
+                convertDecimalToRadix();
+            }
+            if (radixInput) {
+                convertRadixToDecimal();
+            }
+        }
+
+        function generateSizeDisplay(size) {
+            if (displayMode === 'balls') {
+                return generateBalls(size);
+            } else {
+                return `サイズ${size}`;
+            }
+        }
+
+        function generateBalls(count) {
+            if (count === 0) return '<span class="ball-container">0</span>';
+            
+            let ballsHtml = '<span class="ball-container">';
+            for (let i = 0; i < count; i++) {
+                ballsHtml += '<span class="ball"></span>';
+            }
+            ballsHtml += '</span>';
+            return ballsHtml;
+        }
+
         function convertDecimalToRadix() {
             const radix = parseInt(document.getElementById('radix').value);
             const decimal = parseInt(document.getElementById('decimalInput').value);
@@ -267,23 +374,27 @@
             
             if (level === 0) {
                 // レベル0: 個別の物をサイズNの箱に詰める
-                currentHtml += remaining + '個の物を' + radix + '個ずつ箱に詰める → サイズ' + radix + 'の箱が' + boxCount + '箱できる, 余り' + remainder + '個　　' + remaining + '÷' + radix + ' = ' + boxCount + ' 余り ' + remainder + '<br>';
+                currentHtml += remaining + '個の物を' + radix + '個ずつ箱に詰める → ' + generateSizeDisplay(radix) + 'の箱が' + boxCount + '箱できる, 余り' + remainder + '個　　' + remaining + '÷' + radix + ' = ' + boxCount + ' 余り ' + remainder + '<br>';
                 
                 currentHtml += '<div style="margin: 15px 0; display: flex; gap: 20px; align-items: flex-start;">';
                 
                 currentHtml += '<div style="flex: 1; padding: 10px; background-color: #e8f5e8; border-left: 4px solid #4CAF50; border-radius: 5px;">';
                 if (boxCount > 0) {
-                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + radix + '）</div>';
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（' + generateSizeDisplay(radix) + '）</div>';
                     currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
                     for (let i = 0; i < Math.min(boxCount, 10); i++) {
-                        currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">サイズ' + radix + '</div>';
+                        if (displayMode === 'balls') {
+                            currentHtml += '<div class="ball-group">' + generateSizeDisplay(radix) + '</div>';
+                        } else {
+                            currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">' + generateSizeDisplay(radix) + '</div>';
+                        }
                     }
                     if (boxCount > 10) {
                         currentHtml += ' <div style="margin: 10px; font-weight: bold; align-self: center;">... (合計' + boxCount + '箱)</div>';
                     }
                     currentHtml += '</div>';
                 } else {
-                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + radix + '）</div>';
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（' + generateSizeDisplay(radix) + '）</div>';
                     currentHtml += '<div style="color: #666; font-style: italic;">箱は作られませんでした</div>';
                 }
                 currentHtml += '</div>';
@@ -310,23 +421,27 @@
             } else {
                 // レベル1以降: 前のレベルの箱をより大きな箱に詰める
                 const prevBoxSize = Math.pow(radix, level);
-                const prevLevelName = 'サイズ' + prevBoxSize;
+                const prevLevelName = generateSizeDisplay(prevBoxSize);
                 const availableBoxes = Math.floor(remaining / prevBoxSize);
                 
-                currentHtml += availableBoxes + '個の' + prevLevelName + '箱を' + radix + '個ずつ箱に詰める → サイズ' + currentBoxSize + 'の箱が' + boxCount + '箱できる, 余り' + (availableBoxes % radix) + '個の' + prevLevelName + '箱　　' + availableBoxes + '÷' + radix + ' = ' + boxCount + ' 余り ' + (availableBoxes % radix) + '<br>';
+                currentHtml += availableBoxes + '個の' + prevLevelName + '箱を' + radix + '個ずつ箱に詰める → ' + generateSizeDisplay(currentBoxSize) + 'の箱が' + boxCount + '箱できる, 余り' + (availableBoxes % radix) + '個の' + prevLevelName + '箱　　' + availableBoxes + '÷' + radix + ' = ' + boxCount + ' 余り ' + (availableBoxes % radix) + '<br>';
                 
                 currentHtml += '<div style="margin: 15px 0; display: flex; gap: 20px; align-items: flex-start;">';
                 
                 currentHtml += '<div style="flex: 1; padding: 10px; background-color: #e8f5e8; border-left: 4px solid #4CAF50; border-radius: 5px;">';
                 if (boxCount > 0) {
-                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + currentBoxSize + '）</div>';
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（' + generateSizeDisplay(currentBoxSize) + '）</div>';
                     currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
                     for (let i = 0; i < Math.min(boxCount, 10); i++) {
                         currentHtml += '<div class="big-box" style="background-color: #ffecb3; border: 3px solid #f57f17; border-radius: 12px; padding: 8px; margin: 5px; position: relative;">';
-                        currentHtml += '<div class="big-box-label" style="position: absolute; top: -12px; left: 10px; background-color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-radius: 4px;">サイズ' + currentBoxSize + '</div>';
+                        currentHtml += '<div class="big-box-label" style="position: absolute; top: -12px; left: 10px; background-color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-radius: 4px;">' + generateSizeDisplay(currentBoxSize) + '</div>';
                         currentHtml += '<div class="small-boxes-container" style="display: flex; flex-wrap: wrap; gap: 3px; align-items: center; justify-content: center;">';
                         for (let j = 0; j < radix; j++) {
-                            currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b; font-size: 10px;">' + prevLevelName + '</div>';
+                            if (displayMode === 'balls') {
+                                currentHtml += '<div class="ball-group" style="font-size: 10px;">' + prevLevelName + '</div>';
+                            } else {
+                                currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b; font-size: 10px;">' + prevLevelName + '</div>';
+                            }
                         }
                         currentHtml += '</div>';
                         currentHtml += '</div>';
@@ -336,7 +451,7 @@
                     }
                     currentHtml += '</div>';
                 } else {
-                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + currentBoxSize + '）</div>';
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（' + generateSizeDisplay(currentBoxSize) + '）</div>';
                     currentHtml += '<div style="color: #666; font-style: italic;">箱は作られませんでした</div>';
                 }
                 currentHtml += '</div>';
@@ -444,7 +559,7 @@
                 if (info.level === 0) {
                     finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; border: 2px dotted #999;">箱なし</td>';
                 } else {
-                    const levelName = 'サイズ' + info.boxSize;
+                    const levelName = generateSizeDisplay(info.boxSize);
                     finalResultHtml += '<td style="border: 1px solid #ccc; padding: 8px 15px; text-align: center; background-color: #e1f5fe;">' + levelName + '</td>';
                 }
             }
@@ -594,6 +709,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // デフォルトでテキストモードを有効化
+            setDisplayMode('text');
             convertDecimalToRadix();
         });
 
