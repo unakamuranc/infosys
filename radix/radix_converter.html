@@ -360,7 +360,10 @@
             
             visualDiv.innerHTML = previousHtml + currentHtml;
             
-            if (boxCount >= radix && level < 5) {
+            // 次のレベルに進む条件：
+            // 商(boxCount)が1以上の場合は次のレベルに進む
+            // 商が0になった場合は、そのステップを表示してから終了
+            if (boxCount > 0 && level < 5) {
                 setTimeout(() => {
                     visualizeHierarchicalBoxing(remaining, radix, level + 1, stepHtml, previousHtml + currentHtml, stepsDiv, visualDiv, resultDiv);
                 }, 1500);
