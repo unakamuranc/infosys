@@ -121,11 +121,12 @@
         }
         .unit {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: #4CAF50;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #81C784, #4CAF50, #2E7D32);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
             margin: 2px;
-            border-radius: 3px;
         }
         .group {
             display: inline-block;
@@ -254,9 +255,7 @@
         let displayMode = 'text'; // 'text' or 'balls'
 
         function setDisplayMode(mode) {
-            console.log('setDisplayMode called with mode:', mode);
             displayMode = mode;
-            console.log('displayMode set to:', displayMode);
             
             // アクティブボタンの切り替え
             document.querySelectorAll('.mode-button').forEach(btn => btn.classList.remove('active'));
@@ -275,15 +274,10 @@
         }
 
         function generateSizeDisplay(size) {
-            console.log('generateSizeDisplay called with size:', size, 'displayMode:', displayMode);
             if (displayMode === 'balls') {
-                const result = generateBalls(size);
-                console.log('Generated balls:', result);
-                return result;
+                return generateBalls(size);
             } else {
-                const result = `サイズ${size}`;
-                console.log('Generated text:', result);
-                return result;
+                return `サイズ${size}`;
             }
         }
 
@@ -296,6 +290,21 @@
             }
             ballsHtml += '</span>';
             return ballsHtml;
+        }
+
+        function generateUnits(count, maxToShow = 50) {
+            let unitsHtml = '';
+            for (let i = 0; i < Math.min(count, maxToShow); i++) {
+                if (displayMode === 'balls') {
+                    unitsHtml += '<span class="ball"></span>';
+                } else {
+                    unitsHtml += '<span class="unit"></span>';
+                }
+            }
+            if (count > maxToShow) {
+                unitsHtml += ' <span>... (合計' + count + '個)</span>';
+            }
+            return unitsHtml;
         }
 
         function convertDecimalToRadix() {
@@ -351,13 +360,7 @@
             stepsDiv.innerHTML = stepHtml;
             
             let unitsHtml = '<div>物: ';
-            const maxUnitsToShow = 50;
-            for (let i = 0; i < Math.min(decimal, maxUnitsToShow); i++) {
-                unitsHtml += '<span class="unit"></span>';
-            }
-            if (decimal > maxUnitsToShow) {
-                unitsHtml += ' <span>... (合計' + decimal + '個)</span>';
-            }
+            unitsHtml += generateUnits(decimal, 50);
             unitsHtml += '</div><p>合計: ' + decimal + '個</p>';
             visualDiv.innerHTML = unitsHtml;
             
@@ -411,12 +414,8 @@
                 currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">余った物</div>';
                 if (remainder > 0) {
                     currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
-                    for (let i = 0; i < Math.min(remainder, 15); i++) {
-                        currentHtml += '<span class="unit"></span>';
-                    }
-                    if (remainder > 15) {
-                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">... (合計' + remainder + '個)</div>';
-                    } else {
+                    currentHtml += generateUnits(remainder, 15);
+                    if (remainder <= 15) {
                         currentHtml += ' <div style="margin: 5px; font-size: 12px;">(' + remainder + '個)</div>';
                     }
                     currentHtml += '</div>';
