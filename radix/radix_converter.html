@@ -266,7 +266,8 @@
             currentHtml += '<strong>' + currentLevelName + 'の箱作り:</strong><br>';
             
             if (level === 0) {
-                currentHtml += remaining + '個の物を' + radix + '個ずつ箱に詰める  サイズ' + radix + 'の箱が' + boxCount + '箱できる, 余り' + remainder + '個　　' + remaining + '' + radix + ' = ' + boxCount + ' 余り ' + remainder + '<br>';
+                // レベル0: 個別の物をサイズNの箱に詰める
+                currentHtml += remaining + '個の物を' + radix + '個ずつ箱に詰める → サイズ' + radix + 'の箱が' + boxCount + '箱できる, 余り' + remainder + '個　　' + remaining + '÷' + radix + ' = ' + boxCount + ' 余り ' + remainder + '<br>';
                 
                 currentHtml += '<div style="margin: 15px 0; display: flex; gap: 20px; align-items: flex-start;">';
                 
@@ -298,6 +299,53 @@
                         currentHtml += ' <div style="margin: 5px; font-size: 12px;">... (合計' + remainder + '個)</div>';
                     } else {
                         currentHtml += ' <div style="margin: 5px; font-size: 12px;">(' + remainder + '個)</div>';
+                    }
+                    currentHtml += '</div>';
+                } else {
+                    currentHtml += '<div style="color: #666; font-style: italic;">余りはありません</div>';
+                }
+                currentHtml += '</div>';
+                
+                currentHtml += '</div>';
+            } else {
+                // レベル1以降: 前のレベルの箱をより大きな箱に詰める
+                const prevBoxSize = Math.pow(radix, level);
+                const prevLevelName = 'サイズ' + prevBoxSize;
+                const availableBoxes = Math.floor(remaining / prevBoxSize);
+                
+                currentHtml += availableBoxes + '個の' + prevLevelName + '箱を' + radix + '個ずつ箱に詰める → サイズ' + currentBoxSize + 'の箱が' + boxCount + '箱できる, 余り' + (availableBoxes % radix) + '個の' + prevLevelName + '箱　　' + availableBoxes + '÷' + radix + ' = ' + boxCount + ' 余り ' + (availableBoxes % radix) + '<br>';
+                
+                currentHtml += '<div style="margin: 15px 0; display: flex; gap: 20px; align-items: flex-start;">';
+                
+                currentHtml += '<div style="flex: 1; padding: 10px; background-color: #e8f5e8; border-left: 4px solid #4CAF50; border-radius: 5px;">';
+                if (boxCount > 0) {
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + currentBoxSize + '）</div>';
+                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
+                    for (let i = 0; i < Math.min(boxCount, 10); i++) {
+                        currentHtml += '<div class="group" style="background-color: #ffecb3; border-color: #f57f17;">サイズ' + currentBoxSize + '</div>';
+                    }
+                    if (boxCount > 10) {
+                        currentHtml += ' <div style="margin: 10px; font-weight: bold; align-self: center;">... (合計' + boxCount + '箱)</div>';
+                    }
+                    currentHtml += '</div>';
+                } else {
+                    currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">作られた箱（サイズ' + currentBoxSize + '）</div>';
+                    currentHtml += '<div style="color: #666; font-style: italic;">箱は作られませんでした</div>';
+                }
+                currentHtml += '</div>';
+                
+                currentHtml += '<div style="flex: 1; padding: 10px; background-color: #fff3e0; border-left: 4px solid #ff9800; border-radius: 5px;">';
+                currentHtml += '<div style="font-size: 14px; font-weight: bold; margin-bottom: 10px;">余った' + prevLevelName + '箱</div>';
+                const remainingPrevBoxes = availableBoxes % radix;
+                if (remainingPrevBoxes > 0) {
+                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
+                    for (let i = 0; i < Math.min(remainingPrevBoxes, 10); i++) {
+                        currentHtml += '<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">' + prevLevelName + '</div>';
+                    }
+                    if (remainingPrevBoxes > 10) {
+                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">... (合計' + remainingPrevBoxes + '箱)</div>';
+                    } else {
+                        currentHtml += ' <div style="margin: 5px; font-size: 12px;">(' + remainingPrevBoxes + '箱)</div>';
                     }
                     currentHtml += '</div>';
                 } else {
