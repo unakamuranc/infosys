@@ -254,7 +254,10 @@
         let displayMode = 'text'; // 'text' or 'balls'
 
         function setDisplayMode(mode) {
+            console.log('setDisplayMode called with mode:', mode);
             displayMode = mode;
+            console.log('displayMode set to:', displayMode);
+            
             // アクティブボタンの切り替え
             document.querySelectorAll('.mode-button').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`[onclick="setDisplayMode('${mode}')"]`).classList.add('active');
@@ -272,10 +275,15 @@
         }
 
         function generateSizeDisplay(size) {
+            console.log('generateSizeDisplay called with size:', size, 'displayMode:', displayMode);
             if (displayMode === 'balls') {
-                return generateBalls(size);
+                const result = generateBalls(size);
+                console.log('Generated balls:', result);
+                return result;
             } else {
-                return `サイズ${size}`;
+                const result = `サイズ${size}`;
+                console.log('Generated text:', result);
+                return result;
             }
         }
 
