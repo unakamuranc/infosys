@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N進法と10進法の相互変換</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .converter-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: #fafafa;
+        }
+        .visualization {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            min-height: 200px;
+        }
+        .group {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 60px;
+            vertical-align: top;
+        }
+        .group.highlight {
+            background-color: #ffeb3b;
+            border-color: #ff9800;
+        }
+        .box-level-0 {
+            background-color: #e8f5e8;
+            border-color: #4CAF50;
+        }
+        .box-level-1 {
+            background-color: #e1f5fe;
+            border-color: #2196F3;
+        }
+        .box-level-2 {
+            background-color: #f3e5f5;
+            border-color: #9C27B0;
+        }
+        .box-level-3 {
+            background-color: #fff3e0;
+            border-color: #FF9800;
+        }
+        .unit {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #4CAF50;
+            margin: 2px;
+            border-radius: 3px;
+        }
+        .big-box {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            border: 3px solid;
+            border-radius: 12px;
+            vertical-align: top;
+            position: relative;
+        }
+        .big-box-label {
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background-color: white;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        .small-boxes-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+            justify-content: center;
+        }
+        .step-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+            font-size: 14px;
+        }
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+        }
+        .error {
+            color: #f44336;
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>N進法と10進法の相互変換</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="radix">進法 (N):</label>
+                <input type="number" id="radix" min="2" max="16" value="2" />
+            </div>
+            <div class="control-group">
+                <label for="decimalInput">10進数 (k):</label>
+                <input type="number" id="decimalInput" min="0" max="1000" value="13" />
+            </div>
+            <div class="control-group">
+                <label for="radixInput">N進数:</label>
+                <input type="text" id="radixInput" placeholder="例: 1101" />
+            </div>
+        </div>
+
+        <!-- 10進法からN進法への変換 -->
+        <div class="converter-section">
+            <h2>10進法 → N進法への変換</h2>
+            <button onclick="convertDecimalToRadix()">10進数をN進数に変換</button>
+            
+            <div id="decimal-to-radix-steps"></div>
+            <div id="decimal-to-radix-visualization" class="visualization"></div>
+            <div id="decimal-to-radix-result"></div>
+        </div>
+
+        <!-- N進法から10進法への変換 -->
+        <div class="converter-section">
+            <h2>N進法 → 10進法への変換</h2>
+            <button onclick="convertRadixToDecimal()">N進数を10進数に変換</button>
+            
+            <div id="radix-to-decimal-steps"></div>
+            <div id="radix-to-decimal-visualization" class="visualization"></div>
+            <div id="radix-to-decimal-result"></div>
+        </div>
+    </div>
+
+    <script>
+        function convertDecimalToRadix() {
+            const radix = parseInt(document.getElementById('radix').value);
+            const decimal = parseInt(document.getElementById('decimalInput').value);
+            
+            if (radix < 2 || radix > 16) {
+                showError('decimal-to-radix-result', 'Nは2から16の間で指定してください');
+                return;
+            }
+            
+            if (decimal < 0) {
+                showError('decimal-to-radix-result', '正の整数を入力してください');
+                return;
+            }
+
+            visualizeDecimalToRadix(decimal, radix);
+        }
+
+        function convertRadixToDecimal() {
+            const radix = parseInt(document.getElementById('radix').value);
+            const radixStr = document.getElementById('radixInput').value.trim();
+            
+            if (radix < 2 || radix > 16) {
+                showError('radix-to-decimal-result', 'Nは2から16の間で指定してください');
+                return;
+            }
+            
+            if (!radixStr) {
+                showError('radix-to-decimal-result', 'N進数を入力してください');
+                return;
+            }
+
+            // 入力値の検証
+            const validChars = '0123456789ABCDEF'.slice(0, radix);
+            for (let char of radixStr.toUpperCase()) {
+                if (!validChars.includes(char)) {
+                    showError('radix-to-decimal-result', `${radix}進法では使用できない文字が含まれています: ${char}`);
+                    return;
+                }
+            }
+
+            visualizeRadixToDecimal(radixStr.toUpperCase(), radix);
+        }
+
+        function visualizeDecimalToRadix(decimal, radix) {
+            const stepsDiv = document.getElementById('decimal-to-radix-steps');
+            const visualDiv = document.getElementById('decimal-to-radix-visualization');
+            const resultDiv = document.getElementById('decimal-to-radix-result');
+            
+            stepsDiv.innerHTML = '';
+            visualDiv.innerHTML = '';
+            
+            // ステップ1: 個別の物を表示
+            let stepHtml = `<div class="step-info">ステップ1: ${decimal}個の物を表現</div>`;
+            stepsDiv.innerHTML = stepHtml;
+            
+            // 単位を描画
+            let unitsHtml = '<div>物: ';
+            const maxUnitsToShow = 50; // 表示制限
+            for (let i = 0; i < Math.min(decimal, maxUnitsToShow); i++) {
+                unitsHtml += '<span class="unit"></span>';
+            }
+            if (decimal > maxUnitsToShow) {
+                unitsHtml += ` <span>... (合計${decimal}個)</span>`;
+            }
+            unitsHtml += `</div><p>合計: ${decimal}個</p>`;
+            visualDiv.innerHTML = unitsHtml;
+            
+            setTimeout(() => {
+                visualizeHierarchicalBoxing(decimal, radix, 0, stepHtml, unitsHtml, stepsDiv, visualDiv, resultDiv);
+            }, 1000);
+        }
+
+        function visualizeHierarchicalBoxing(remaining, radix, level, stepHtml, previousHtml, stepsDiv, visualDiv, resultDiv) {
+            const boxSize = Math.pow(radix, level + 1);
+            const boxCount = Math.floor(remaining / boxSize);
+            const remainder = remaining % boxSize;
+            
+            const currentBoxSize = Math.pow(radix, level + 1);
+            const currentLevelName = `サイズ${currentBoxSize}`;
+            
+            stepHtml += `<div class="step-info">ステップ${level + 2}: ${currentLevelName}の箱に${radix}箱ずつ詰める</div>`;
+            stepsDiv.innerHTML = stepHtml;
+            
+            let currentHtml = `<div style="margin: 15px 0; padding: 10px; background-color: #f0f8ff; border-left: 4px solid #2196f3;">`;
+            currentHtml += `<strong>${currentLevelName}の箱作り:</strong><br>`;
+            
+            if (level === 0) {
+                // レベル0: 個別の物をサイズ1の箱（N個入り）に詰める
+                currentHtml += `${remaining}個の物を${radix}個ずつ箱に詰める<br>`;
+                currentHtml += `→ サイズ${radix}の箱が${boxCount}箱できる, 余り${remainder}個<br>`;
+                
+                // 箱と余りを横並びで視覚化
+                currentHtml += '<div style="margin: 15px 0; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 15px;">';
+                
+                // サイズNの箱を表示
+                if (boxCount > 0) {
+                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
+                    for (let i = 0; i < Math.min(boxCount, 10); i++) {
+                        currentHtml += `<div class="group" style="background-color: #e1f5fe; border-color: #01579b;">サイズ${radix}</div>`;
+                    }
+                    if (boxCount > 10) {
+                        currentHtml += ` <div style="margin: 10px; font-weight: bold; align-self: center;">... (合計${boxCount}箱)</div>`;
+                    }
+                    currentHtml += '</div>';
+                }
+                
+                // 余りの個別の物を表示
+                if (remainder > 0) {
+                    currentHtml += '<div style="display: flex; flex-direction: column; align-items: center;">';
+                    currentHtml += '<div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">余り</div>';
+                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 3px;">';
+                    for (let i = 0; i < Math.min(remainder, 15); i++) {
+                        currentHtml += '<span class="unit"></span>';
+                    }
+                    if (remainder > 15) {
+                        currentHtml += ` <div style="margin: 5px; font-size: 12px;">... (合計${remainder}個)</div>`;
+                    } else {
+                        currentHtml += ` <div style="margin: 5px; font-size: 12px;">(${remainder}個)</div>`;
+                    }
+                    currentHtml += '</div></div>';
+                }
+                
+                currentHtml += '</div>';
+            } else {
+                // レベル1以上: 前のレベルの箱をN箱ずつ大きい箱に詰める
+                const prevBoxSize = Math.pow(radix, level);
+                const prevBoxCount = Math.floor(remaining / prevBoxSize);
+                const currentBoxSize = Math.pow(radix, level + 1);
+                const remainingSmallBoxes = Math.floor(remainder / prevBoxSize);
+                
+                // サイズ表示を具体的な数値に変更
+                const prevSizeName = `サイズ${prevBoxSize}`;
+                const currentSizeName = `サイズ${currentBoxSize}`;
+                
+                currentHtml += `${prevSizeName}の箱（${prevBoxCount}箱）を${radix}箱ずつ大きい箱に詰める<br>`;
+                currentHtml += `→ ${currentSizeName}の箱が${boxCount}箱できる, 余り${prevSizeName}の箱が${remainingSmallBoxes}箱<br>`;
+                
+                // 大きい箱と余りの箱を横並びで表示
+                currentHtml += '<div style="margin: 15px 0; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 15px;">';
+                
+                // 大きい箱を表示
+                if (boxCount > 0) {
+                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
+                    for (let i = 0; i < Math.min(boxCount, 6); i++) {
+                        const bigBoxColor = getBoxColor(level + 1);
+                        currentHtml += `<div class="big-box" style="border-color: ${bigBoxColor.border}; background-color: ${bigBoxColor.bg};">`;
+                        currentHtml += `<div class="big-box-label" style="color: ${bigBoxColor.border};">${currentSizeName}</div>`;
+                        currentHtml += '<div class="small-boxes-container">';
+                        
+                        // 大きい箱の中に小さい箱をN個表示
+                        for (let j = 0; j < radix; j++) {
+                            const smallBoxColor = getBoxColor(level);
+                            currentHtml += `<div class="group" style="background-color: ${smallBoxColor.bg}; border-color: ${smallBoxColor.border}; font-size: 10px; padding: 5px; margin: 2px;">${prevSizeName}</div>`;
+                        }
+                        
+                        currentHtml += '</div></div>';
+                    }
+                    
+                    if (boxCount > 6) {
+                        currentHtml += ` <div style="margin: 10px; font-weight: bold; align-self: center;">... (合計${boxCount}箱)</div>`;
+                    }
+                    currentHtml += '</div>';
+                }
+                
+                // 余りの小さい箱を大きい箱の右側に表示
+                if (remainingSmallBoxes > 0) {
+                    currentHtml += '<div style="display: flex; flex-direction: column; align-items: center;">';
+                    currentHtml += '<div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">余り</div>';
+                    currentHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
+                    const smallBoxColor = getBoxColor(level);
+                    for (let i = 0; i < Math.min(remainingSmallBoxes, 8); i++) {
+                        currentHtml += `<div class="group" style="background-color: ${smallBoxColor.bg}; border-color: ${smallBoxColor.border}; font-size: 11px;">${prevSizeName}</div>`;
+                    }
+                    if (remainingSmallBoxes > 8) {
+                        currentHtml += ` <div style="margin: 5px; font-size: 12px;">... (合計${remainingSmallBoxes}箱)</div>`;
+                    }
+                    currentHtml += '</div></div>';
+                }
+                
+                currentHtml += '</div>';
+            }
+            
+            currentHtml += '</div>';
+            
+            visualDiv.innerHTML = previousHtml + currentHtml;
+            
+            // 次のレベルに進むかチェック
+            if (boxCount >= radix && level < 5) {
+                // まだ箱詰めできる場合は次のレベルへ
+                setTimeout(() => {
+                    visualizeHierarchicalBoxing(remaining, radix, level + 1, stepHtml, previousHtml + currentHtml, stepsDiv, visualDiv, resultDiv);
+                }, 1500);
+            } else if (boxCount > 0 && boxCount < radix && level < 5) {
+                // 箱があるが基数未満の場合、次のレベルの箱作りを試行
+                const nextBoxSize = Math.pow(radix, level + 2);
+                const nextLevelName = `サイズ${nextBoxSize}`;
+                const currentSizeName = `サイズ${Math.pow(radix, level + 1)}`;
+                
+                setTimeout(() => {
+                    const stepNum = level + 3;
+                    stepHtml += `<div class="step-info">ステップ${stepNum}: ${nextLevelName}の箱作り</div>`;
+                    
+                    let nextLevelHtml = `<div style="margin: 15px 0; padding: 10px; background-color: #fff8e1; border-left: 4px solid #ff9800;">`;
+                    nextLevelHtml += `<strong>${nextLevelName}の箱作り:</strong><br>`;
+                    nextLevelHtml += `${currentSizeName}の箱（${boxCount}箱）を${radix}箱ずつ大きい箱に詰める<br>`;
+                    nextLevelHtml += `→ ${nextLevelName}の箱が0箱できる, 余り${currentSizeName}の箱が${boxCount}箱<br>`;
+                    
+                    // 空の大きい箱と余りを表示
+                    nextLevelHtml += '<div style="margin: 15px 0; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 15px;">';
+                    
+                    // 空の大きい箱を表示
+                    const bigBoxColor = getBoxColor(level + 2);
+                    nextLevelHtml += '<div style="display: flex; flex-direction: column; align-items: center;">';
+                    nextLevelHtml += '<div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">作れる箱</div>';
+                    nextLevelHtml += `<div class="big-box" style="border-color: ${bigBoxColor.border}; background-color: ${bigBoxColor.bg}; opacity: 0.5;">`;
+                    nextLevelHtml += `<div class="big-box-label" style="color: ${bigBoxColor.border};">${nextLevelName}</div>`;
+                    nextLevelHtml += '<div class="small-boxes-container" style="font-size: 12px; color: #666;">何も入らない</div>';
+                    nextLevelHtml += '</div></div>';
+                    
+                    // 余りの箱を表示
+                    nextLevelHtml += '<div style="display: flex; flex-direction: column; align-items: center;">';
+                    nextLevelHtml += '<div style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">余り</div>';
+                    nextLevelHtml += '<div style="display: flex; flex-wrap: wrap; gap: 5px;">';
+                    const smallBoxColor = getBoxColor(level + 1);
+                    for (let i = 0; i < Math.min(boxCount, 8); i++) {
+                        nextLevelHtml += `<div class="group" style="background-color: ${smallBoxColor.bg}; border-color: ${smallBoxColor.border}; font-size: 11px;">${currentSizeName}</div>`;
+                    }
+                    if (boxCount > 8) {
+                        nextLevelHtml += ` <div style="margin: 5px; font-size: 12px;">... (合計${boxCount}箱)</div>`;
+                    }
+                    nextLevelHtml += '</div></div>';
+                    nextLevelHtml += '</div></div>';
+                    
+                    // 表示を更新
+                    stepsDiv.innerHTML = stepHtml;
+                    visualDiv.innerHTML = previousHtml + currentHtml + nextLevelHtml;
+                    
+                    // 最終ステップ: 結果の表示
+                    setTimeout(() => {
+                        showFinalResult(remaining, radix, stepHtml, previousHtml + currentHtml + nextLevelHtml, stepsDiv, visualDiv, resultDiv);
+                    }, 1500);
+                }, 1500);
+            } else {
+                // 最終ステップ: 結果の表示
+                setTimeout(() => {
+                    showFinalResult(remaining, radix, stepHtml, previousHtml + currentHtml, stepsDiv, visualDiv, resultDiv);
+                }, 1500);
+            }
+        }
+
+        function getBoxColor(level) {
+            const colors = [
+                { bg: '#e8f5e8', border: '#4CAF50' }, // レベル0
+                { bg: '#e1f5fe', border: '#2196F3' }, // レベル1
+                { bg: '#f3e5f5', border: '#9C27B0' }, // レベル2
+                { bg: '#fff3e0', border: '#FF9800' }, // レベル3
+                { bg: '#ffebee', border: '#f44336' }, // レベル4
+                { bg: '#e0f2f1', border: '#009688' }  // レベル5
+            ];
+            return colors[level % colors.length];
+        }
+
+        function showFinalResult(decimal, radix, stepHtml, previousHtml, stepsDiv, visualDiv, resultDiv) {
+            stepHtml += `<div class="step-info">最終ステップ: 各サイズの箱の個数から${radix}進法を求める</div>`;
+            
+            // 各レベルでの箱の数を計算
+            let tempDecimal = decimal;
+            let digits = [];
+            let level = 0;
+            let finalResultHtml = '<div style="margin: 15px 0; padding: 15px; background-color: #f9f9f9; border: 2px solid #333;">';
+            finalResultHtml += '<strong>各サイズの箱の個数:</strong><br><br>';
+            
+            while (tempDecimal > 0 || level === 0) {
+                const boxSize = Math.pow(radix, level);
+                const boxCount = Math.floor(tempDecimal / boxSize);
+                const remainder = tempDecimal % boxSize;
+                
+                const digit = tempDecimal % radix;
+                const digitChar = digit < 10 ? digit.toString() : String.fromCharCode(65 + digit - 10);
+                digits.unshift(digitChar);
+                
+                if (level === 0) {
+                    finalResultHtml += `余りの物: ${digit}個 → ${radix}進法の${level}桁目は ${digitChar}<br>`;
+                } else {
+                    const levelName = level === 1 ? `サイズ${radix}` : `サイズ${radix}^${level}`;
+                    finalResultHtml += `${levelName}の箱: ${digit}箱 → ${radix}進法の${level}桁目は ${digitChar}<br>`;
+                }
+                
+                tempDecimal = Math.floor(tempDecimal / radix);
+                level++;
+                
+                if (tempDecimal === 0) break;
+            }
+            
+            const result = digits.join('');
+            finalResultHtml += `<br><strong>したがって: ${decimal}(10) = ${result}(${radix})</strong>`;
+            finalResultHtml += '</div>';
+            
+            stepsDiv.innerHTML = stepHtml;
+            visualDiv.innerHTML = previousHtml + finalResultHtml;
+            resultDiv.innerHTML = `<div class="result">${decimal}(10) = ${result}(${radix})</div>`;
+        }
+
+        function visualizeRadixToDecimal(radixStr, radix) {
+            const stepsDiv = document.getElementById('radix-to-decimal-steps');
+            const visualDiv = document.getElementById('radix-to-decimal-visualization');
+            const resultDiv = document.getElementById('radix-to-decimal-result');
+            
+            stepsDiv.innerHTML = '';
+            visualDiv.innerHTML = '';
+            
+            // 各桁の値を計算
+            let stepHtml = `<div class="step-info">ステップ1: ${radixStr}(${radix})の各桁を分析</div>`;
+            stepsDiv.innerHTML = stepHtml;
+            
+            let positionHtml = '<div>各桁の位置価値: ';
+            const digits = radixStr.split('');
+            const length = digits.length;
+            
+            for (let i = 0; i < length; i++) {
+                const power = length - 1 - i;
+                const position = Math.pow(radix, power);
+                positionHtml += `<div class="group">${digits[i]} × ${radix}^${power} = ${digits[i]} × ${position}</div>`;
+            }
+            positionHtml += '</div>';
+            visualDiv.innerHTML = positionHtml;
+            
+            setTimeout(() => {
+                // ステップ2: 各桁の値を視覚化
+                stepHtml += `<div class="step-info">ステップ2: 各桁の実際の値を単位で表現</div>`;
+                stepsDiv.innerHTML = stepHtml;
+                
+                let valuesHtml = '<div>';
+                let total = 0;
+                
+                for (let i = 0; i < length; i++) {
+                    const digit = parseInt(digits[i], radix);
+                    const power = length - 1 - i;
+                    const position = Math.pow(radix, power);
+                    const value = digit * position;
+                    total += value;
+                    
+                    valuesHtml += `<div style="margin: 10px 0;">`;
+                    valuesHtml += `<p>${digits[i]} × ${position} = ${value}</p>`;
+                    valuesHtml += '<div>';
+                    
+                    // グループで表示（視覚化のため、大きい数は制限）
+                    const groupSize = position;
+                    const numGroups = digit;
+                    
+                    if (value <= 200) { // 視覚化可能な範囲
+                        for (let j = 0; j < numGroups; j++) {
+                            valuesHtml += `<div class="group highlight">${groupSize}個</div>`;
+                        }
+                    } else {
+                        valuesHtml += `<div class="group highlight">${numGroups} × ${groupSize} = ${value}個</div>`;
+                    }
+                    
+                    valuesHtml += '</div></div>';
+                }
+                valuesHtml += '</div>';
+                
+                visualDiv.innerHTML = positionHtml + valuesHtml;
+                
+                setTimeout(() => {
+                    // ステップ3: 合計を計算
+                    stepHtml += `<div class="step-info">ステップ3: すべての値を合計</div>`;
+                    
+                    let calculationHtml = '<div><p>計算:</p>';
+                    let calculation = '';
+                    
+                    for (let i = 0; i < length; i++) {
+                        const digit = parseInt(digits[i], radix);
+                        const power = length - 1 - i;
+                        const position = Math.pow(radix, power);
+                        const value = digit * position;
+                        
+                        if (i > 0) calculation += ' + ';
+                        calculation += value.toString();
+                    }
+                    
+                    calculationHtml += `<p>${calculation} = ${total}</p></div>`;
+                    
+                    stepsDiv.innerHTML = stepHtml + calculationHtml;
+                    
+                    resultDiv.innerHTML = `<div class="result">${radixStr}(${radix}) = ${total}(10)</div>`;
+                }, 1500);
+            }, 1000);
+        }
+
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="result error">${message}</div>`;
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初期表示として2進法での変換を表示
+            convertDecimalToRadix();
+        });
+
+        // エンターキーでの実行
+        document.getElementById('decimalInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convertDecimalToRadix();
+        });
+
+        document.getElementById('radixInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convertRadixToDecimal();
+        });
+
+        document.getElementById('radix').addEventListener('change', function() {
+            // 進法が変更された時に自動で再計算
+            if (document.getElementById('decimalInput').value) {
+                convertDecimalToRadix();
+            }
+        });
+    </script>
+</body>
+</html>
