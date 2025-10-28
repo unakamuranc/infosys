@@ -9,6 +9,7 @@
             margin: 0;
             padding: 20px;
             font-family: 'Arial', sans-serif;
+            font-size: 14px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
@@ -35,6 +36,7 @@
             align-items: flex-start;
             margin-bottom: 30px;
             min-height: 500px;
+            position: relative;
         }
 
         .cpu-section {
@@ -74,10 +76,10 @@
 
         .address-bus, .data-bus {
             width: 100%;
-            height: 80px;
+            height: 70px;
             border: 2px solid #34495e;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 5px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -93,6 +95,7 @@
         .data-bus {
             background: #e74c3c;
             color: white;
+            margin-bottom: 10px;
         }
 
         .bus-label {
@@ -123,7 +126,7 @@
         }
 
         .address-controls {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .address-buttons {
@@ -150,6 +153,7 @@
 
         .address-btn.active {
             background: #e74c3c;
+            color: white;
         }
 
         .memory-table {
@@ -174,7 +178,37 @@
         }
 
         .memory-table tr.selected {
-            background: #f39c12 !important;
+            background: #e74c3c !important;
+            color: white !important;
+        }
+
+        .memory-table tr.selected td {
+            background: #e74c3c !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .memory-table tr:not(.selected) {
+            background: #f8f9fa !important;
+            color: #6c757d !important;
+        }
+
+        .memory-table tr:not(.selected) td {
+            background: #f8f9fa !important;
+            color: #6c757d !important;
+        }
+
+        .memory-table tr:not(.selected) .data-input {
+            background: #f8f9fa !important;
+            color: #6c757d !important;
+            border-color: #dee2e6 !important;
+        }
+
+        .memory-table tr.selected .data-input {
+            background: #dc3545 !important;
+            color: white !important;
+            border-color: #721c24 !important;
+            font-weight: bold;
         }
 
         .memory-table td.data {
@@ -389,14 +423,15 @@
         }
 
         .input-btn {
-            padding: 8px 12px;
+            padding: 5px 8px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             background: #17a2b8;
             color: white;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
+            min-width: 28px;
         }
 
         .input-btn:hover {
@@ -413,22 +448,207 @@
             color: #0c5460;
         }
 
-        /* I/O Row Styles */
-        .io-row {
-            background: #d1ecf1 !important;
+        /* Output Row Styles (Address 10) */
+        .output-row {
+            background: #e8f5e9 !important;
         }
 
-        .io-data {
+        .output-row.selected {
+            background: #e74c3c !important;
+            color: white !important;
+        }
+
+        .output-row:not(.selected) {
+            background: #e8f5e9 !important;
+            color: #2e7d32 !important;
+        }
+
+        .output-row .data {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-weight: bold;
-            color: #0c5460;
+            gap: 5px;
+        }
+
+        .output-row .data-input {
+            width: 25px;
+            height: 25px;
+        }
+
+        .output-row.selected .data-input {
+            background: #dc3545 !important;
+            color: white !important;
+            border-color: #721c24 !important;
+        }
+
+        .output-row:not(.selected) .data-input {
+            background: #e8f5e9 !important;
+            color: #2e7d32 !important;
+            border-color: #4caf50 !important;
+        }
+
+        /* Input Row Styles (Address 11) */
+        .input-row {
+            background: #d1ecf1 !important;
+        }
+
+        .input-row.selected {
+            background: #e74c3c !important;
+            color: white !important;
+        }
+
+        .input-row:not(.selected) {
+            background: #d1ecf1 !important;
+            color: #0c5460 !important;
+        }
+
+        .input-row .data {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .input-row .data-input {
+            width: 25px;
+            height: 25px;
+        }
+
+        .input-row.selected .data-input {
+            background: #dc3545 !important;
+            color: white !important;
+            border-color: #721c24 !important;
+        }
+
+        .input-row:not(.selected) .data-input {
+            background: #d1ecf1 !important;
+            color: #0c5460 !important;
+            border-color: #17a2b8 !important;
         }
 
         .io-indicator {
             font-size: 16px;
+        }
+
+        /* External Devices Container */
+        .external-devices {
+            display: flex;
+            flex-direction: column;
+            gap: -10px;
+            align-items: center;
+            margin: 33px 0;
+            position: relative;
+        }
+
+        /* External Output Device */
+        .external-output {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 6px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            margin-top: 45px;
+        }
+
+        .output-label {
+            font-weight: bold;
+            color: #2e7d32;
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        .output-screen {
+            background: #1b5e20;
+            border: 2px solid #388e3c;
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: #4caf50;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 35px;
+            text-align: center;
+            text-shadow: 0 0 3px #4caf50;
+        }
+
+        /* External Input Device */
+        .external-input {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            border-radius: 6px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .input-label {
+            font-weight: bold;
+            color: #0c5460;
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-display {
+            background: #0c5460;
+            border: 2px solid #17a2b8;
+            border-radius: 8px;
+            padding: 6px 10px;
+            color: #17a2b8;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            background: #6c757d;
+            z-index: 1;
+        }
+
+        .output-line {
+            width: 60px;
+            height: 3px;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .input-line {
+            width: 60px;
+            height: 3px;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .line-label {
+            position: absolute;
+            left: 50%;
+            top: -20px;
+            transform: translateX(-50%);
+            background: white;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #495057;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            white-space: nowrap;
         }
 
         /* Animation for register operations */
@@ -440,6 +660,17 @@
             0% { background: #fff3cd; }
             50% { background: #ffd700; }
             100% { background: #fff3cd; }
+        }
+
+        /* Animation for display update */
+        .display-update {
+            animation: displayFlash 0.5s;
+        }
+
+        @keyframes displayFlash {
+            0% { text-shadow: 0 0 5px #4caf50; }
+            50% { text-shadow: 0 0 15px #81c784, 0 0 25px #4caf50; }
+            100% { text-shadow: 0 0 5px #4caf50; }
         }
     </style>
 </head>
@@ -453,7 +684,7 @@
                 <div class="cpu-title">CPU</div>
                 <div class="character">👩‍💻</div>
                 <div class="cpu-speech" id="cpuSpeech">
-                    アドレス00のデータを読み取りたい！
+                    アドレス00を選択中。REGと主記憶間でデータ転送できます。
                 </div>
                 
                 <!-- CPU Register -->
@@ -466,8 +697,8 @@
                         </div>
                     </div>
                     <div class="register-controls">
-                        <button class="register-btn" onclick="loadFromRegister()">REG→データバス</button>
-                        <button class="register-btn" onclick="storeToRegister()">データバス→REG</button>
+                        <button class="register-btn" onclick="writeToMemory()">REG→主記憶</button>
+                        <button class="register-btn" onclick="readFromMemory()">主記憶→REG</button>
                     </div>
                 </div>
                 
@@ -505,8 +736,25 @@
                     </div>
                 </div>
 
-                <div class="status" id="operationStatus">
-                    読み取りモード
+                <!-- External Devices -->
+                <div class="external-devices">
+                    <!-- External Output Device (上) -->
+                    <div class="external-output">
+                        <div class="output-label">📺 出力装置(アドレス10)</div>
+                        <div class="output-screen" id="externalDisplay">11</div>
+                    </div>
+
+                    <!-- External Input Device (下) -->
+                    <div class="external-input">
+                        <div class="input-label">📱 入力装置(アドレス11)</div>
+                        <div class="input-controls">
+                            <button class="input-btn" onclick="setExternalInput(0)">00</button>
+                            <button class="input-btn" onclick="setExternalInput(1)">01</button>
+                            <button class="input-btn" onclick="setExternalInput(2)">10</button>
+                            <button class="input-btn" onclick="setExternalInput(3)">11</button>
+                        </div>
+                        <div class="input-display" id="inputDisplay">00</div>
+                    </div>
                 </div>
             </div>
 
@@ -515,7 +763,7 @@
                 <div class="memory-title">主記憶</div>
                 <div class="character">👨‍💼</div>
                 <div class="memory-speech" id="memorySpeech">
-                    アドレス00のデータを送ります！
+                    アドレス00: データ 10 を保存中。
                 </div>
                 
                 <table class="memory-table">
@@ -540,55 +788,51 @@
                                 <input type="text" class="data-input" maxlength="1" value="1" onchange="updateMemoryData(1, 1, this.value)">
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="output-row">
                             <td>10</td>
                             <td class="data">
                                 <input type="text" class="data-input" maxlength="1" value="1" onchange="updateMemoryData(2, 0, this.value)">
                                 <input type="text" class="data-input" maxlength="1" value="1" onchange="updateMemoryData(2, 1, this.value)">
+                                <div class="io-indicator">📺</div>
                             </td>
                         </tr>
-                        <tr class="io-row">
+                        <tr class="input-row">
                             <td>11</td>
-                            <td class="data io-data">
-                                <span id="ioDataDisplay">00</span>
-                                <div class="io-indicator">📡</div>
+                            <td class="data">
+                                <input type="text" class="data-input" maxlength="1" value="0" onchange="updateMemoryData(3, 0, this.value)">
+                                <input type="text" class="data-input" maxlength="1" value="0" onchange="updateMemoryData(3, 1, this.value)">
+                                <div class="io-indicator">�</div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                
-                <!-- External Input Device -->
-                <div class="input-device">
-                    <div class="input-device-title">📱 外部入力装置</div>
-                    <div class="input-device-content">
-                        <div class="input-buttons">
-                            <button class="input-btn" onclick="setExternalInput(0)">00</button>
-                            <button class="input-btn" onclick="setExternalInput(1)">01</button>
-                            <button class="input-btn" onclick="setExternalInput(2)">10</button>
-                            <button class="input-btn" onclick="setExternalInput(3)">11</button>
-                        </div>
-                        <div class="input-status">
-                            現在の入力値: <span id="inputValue">00</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
+
+
+
+                <div class="output-label">� 出力装置(アドレス10)</div>
+                <div class="output-screen" id="externalDisplay">11</div>
+            </div>
+
+
+
+
+
         <div class="controls">
-            <button class="control-btn" onclick="performRead()">📖 データ読み取り</button>
-            <button class="control-btn" onclick="performWrite()">✏️ データ書き込み</button>
             <button class="control-btn" onclick="resetSimulation()">🔄 リセット</button>
         </div>
 
         <div class="info-panel">
             <div class="info-title">📚 使い方</div>
             <p><strong>1. アドレス選択:</strong> アドレスバス下のボタン（00, 01, 10, 11）でアクセス先を指定</p>
-            <p><strong>2. データ読み取り:</strong> 「データ読み取り」ボタンで、メモリ→データバス→レジスタに自動格納</p>
-            <p><strong>3. データ書き込み:</strong> 「データ書き込み」ボタンで、レジスタ→データバス→メモリに書き込み</p>
-            <p><strong>4. レジスタ操作:</strong> 「REG→データバス」「データバス→REG」で手動レジスタ操作</p>
-            <p><strong>5. 外部入力:</strong> 入力装置の00/01/10/11ボタンでアドレス11の値を設定</p>
-            <p><strong>6. データ編集:</strong> 主記憶テーブル（00-10）の入力欄で直接0/1を変更可能</p>
+            <p><strong>2. 主記憶→REG:</strong> 選択したアドレスからレジスタにデータを読み込み</p>
+            <p><strong>3. REG→主記憶:</strong> レジスタから選択したアドレスにデータを書き込み</p>
+            <p><strong>4. データバス:</strong> 現在選択されているアドレスの内容を常時表示</p>
+            <p><strong>5. 外部入力:</strong> 入力装置のボタンでアドレス11に値を送信（線で接続）</p>
+            <p><strong>6. 外部出力:</strong> アドレス10のデータが出力装置に表示される（線で接続）</p>
+            <p><strong>7. データ編集:</strong> 主記憶テーブル（00-10）の入力欄で直接0/1を変更可能</p>
         </div>
     </div>
 
@@ -600,7 +844,6 @@
             [1, 1],  // Address 10: 11
             [0, 0]   // Address 11: 00 (I/O port)
         ];
-        let isWriteMode = false;
         let cpuRegister = [0, 0];  // CPU Register A
         let externalInput = 0;     // External input value (0-3)
 
@@ -636,15 +879,12 @@
         function updateDataBus() {
             const dataBusElements = document.querySelectorAll('#dataBus .bit');
             
-            // If address 11 (I/O), get data from external input
+            // Show current memory content on data bus
             if (currentAddress === 3) {
+                // Address 11: show external input value
                 const inputBinary = externalInput.toString(2).padStart(2, '0');
                 dataBusElements[0].textContent = inputBinary[0];
                 dataBusElements[1].textContent = inputBinary[1];
-                // Also update memory display
-                memory[3][0] = parseInt(inputBinary[0]);
-                memory[3][1] = parseInt(inputBinary[1]);
-                updateIODisplay();
             } else {
                 dataBusElements[0].textContent = memory[currentAddress][0];
                 dataBusElements[1].textContent = memory[currentAddress][1];
@@ -657,20 +897,43 @@
             registerElements[1].textContent = cpuRegister[1];
         }
 
-        function updateIODisplay() {
-            const ioDisplay = document.getElementById('ioDataDisplay');
-            const inputBinary = externalInput.toString(2).padStart(2, '0');
-            ioDisplay.textContent = inputBinary;
+
+
+        function updateExternalDisplay() {
+            const externalDisplay = document.getElementById('externalDisplay');
+            // Display address 10 data (output device)
+            const outputBinary = memory[2].join('');
+            
+            // Update display value
+            externalDisplay.textContent = outputBinary;
+            
+            // Add flash animation
+            externalDisplay.classList.add('display-update');
+            setTimeout(() => {
+                externalDisplay.classList.remove('display-update');
+            }, 500);
+        }
+
+        function updateExternalInputButtons() {
+            // Update button states to reflect current external input value
+            document.querySelectorAll('.input-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', index === externalInput);
+            });
+            
+            // Update input status display
+            document.getElementById('inputValue').textContent = externalInput.toString(2).padStart(2, '0');
         }
 
         function updateCPUSpeech() {
             const addressBinary = currentAddress.toString(2).padStart(2, '0');
             const cpuSpeech = document.getElementById('cpuSpeech');
             
-            if (isWriteMode) {
-                cpuSpeech.textContent = `アドレス${addressBinary}にデータを書き込みます！`;
+            if (currentAddress === 3) {
+                cpuSpeech.textContent = `アドレス${addressBinary}は外部入力装置です。読み取り可能です。`;
+            } else if (currentAddress === 2) {
+                cpuSpeech.textContent = `アドレス${addressBinary}は外部出力装置です。読み書き可能です。`;
             } else {
-                cpuSpeech.textContent = `アドレス${addressBinary}のデータを読み取りたい！`;
+                cpuSpeech.textContent = `アドレス${addressBinary}を選択中。REGと主記憶間でデータ転送できます。`;
             }
         }
 
@@ -679,82 +942,16 @@
             const dataBinary = memory[currentAddress].join('');
             const memorySpeech = document.getElementById('memorySpeech');
             
-            if (isWriteMode) {
-                memorySpeech.textContent = `アドレス${addressBinary}にデータを受け取ります！`;
+            if (currentAddress === 3) {
+                memorySpeech.textContent = `アドレス${addressBinary}: 外部入力値 ${dataBinary} が格納されています。`;
+            } else if (currentAddress === 2) {
+                memorySpeech.textContent = `アドレス${addressBinary}: 外部出力値 ${dataBinary} を表示装置に送信中！`;
             } else {
-                memorySpeech.textContent = `アドレス${addressBinary}のデータ${dataBinary}を送ります！`;
+                memorySpeech.textContent = `アドレス${addressBinary}: データ ${dataBinary} を保存中。`;
             }
         }
 
-        function performRead() {
-            isWriteMode = false;
-            updateDataBus();
-            
-            // Automatically load to register after read
-            setTimeout(() => {
-                storeToRegister();
-            }, 500);
-            
-            const addressName = currentAddress === 3 ? '外部入力装置' : `アドレス${currentAddress.toString(2).padStart(2, '0')}`;
-            document.getElementById('currentOperation').textContent = `${addressName}からデータ読み取り→レジスタに格納`;
-            document.getElementById('operationStatus').className = 'status read';
-            document.getElementById('operationStatus').textContent = '読み取りモード';
-            
-            updateCPUSpeech();
-            updateMemorySpeech();
-            
-            // Animation effect
-            const dataBus = document.querySelector('.data-bus');
-            dataBus.style.animation = 'pulse 0.5s';
-            setTimeout(() => {
-                dataBus.style.animation = '';
-            }, 500);
-        }
 
-        function performWrite() {
-            isWriteMode = true;
-            
-            // First load register data to data bus
-            loadFromRegister();
-            
-            setTimeout(() => {
-                // Get current data from data bus (now containing register data)
-                const dataBusElements = document.querySelectorAll('#dataBus .bit');
-                
-                // Don't write to address 11 (I/O port is read-only)
-                if (currentAddress === 3) {
-                    document.getElementById('currentOperation').textContent = 'エラー: 外部入力装置は読み取り専用です';
-                    return;
-                }
-                
-                memory[currentAddress][0] = parseInt(dataBusElements[0].textContent);
-                memory[currentAddress][1] = parseInt(dataBusElements[1].textContent);
-                
-                // Update memory table inputs
-                const memoryInputs = document.querySelectorAll(`#memoryTable tr:nth-child(${currentAddress + 1}) .data-input`);
-                memoryInputs[0].value = memory[currentAddress][0];
-                memoryInputs[1].value = memory[currentAddress][1];
-                
-                document.getElementById('currentOperation').textContent = `レジスタ→アドレス${currentAddress.toString(2).padStart(2, '0')}に書き込み完了！`;
-                document.getElementById('operationStatus').className = 'status write';
-                document.getElementById('operationStatus').textContent = '書き込みモード';
-                
-                updateCPUSpeech();
-                updateMemorySpeech();
-                
-                // Animation effect
-                const addressBus = document.querySelector('.address-bus');
-                addressBus.style.animation = 'pulse 0.5s';
-                setTimeout(() => {
-                    addressBus.style.animation = '';
-                    isWriteMode = false;
-                    document.getElementById('operationStatus').className = 'status read';
-                    document.getElementById('operationStatus').textContent = '読み取りモード';
-                    updateCPUSpeech();
-                    updateMemorySpeech();
-                }, 1000);
-            }, 300);
-        }
 
         function updateMemoryData(address, bitIndex, value) {
             // Validate input (only 0 or 1)
@@ -763,63 +960,158 @@
                 event.target.value = '0';
             }
             
+            // Prevent manual editing of address 11 (input device controls this)
+            if (address === 3) {
+                event.target.value = memory[address][bitIndex]; // Restore original value
+                return;
+            }
+            
             memory[address][bitIndex] = parseInt(value);
             
+            // If updating address 10 (output port), update external display
+            if (address === 2) {
+                updateExternalDisplay();
+            }
+            
             // Update data bus if current address matches
-            if (address === currentAddress && !isWriteMode) {
+            if (address === currentAddress) {
                 updateDataBus();
             }
             
             updateMemorySpeech();
         }
 
-        function loadFromRegister() {
-            // Load register data to data bus
+        function writeToMemory() {
+            // REG → データバス → 主記憶
+            
+            // Check if writing to address 11 (input device is read-only from CPU)
+            if (currentAddress === 3) {
+                document.getElementById('currentOperation').textContent = 'エラー: アドレス11は入力専用です';
+                return;
+            }
+            
+            // Step 1: Load register data to data bus
             const dataBusElements = document.querySelectorAll('#dataBus .bit');
             dataBusElements[0].textContent = cpuRegister[0];
             dataBusElements[1].textContent = cpuRegister[1];
             
-            document.getElementById('currentOperation').textContent = 'レジスタ→データバス';
-            
-            // Animation
-            const registerSection = document.querySelector('.register-section');
-            registerSection.classList.add('register-highlight');
+            // Step 2: Write data bus content to memory
             setTimeout(() => {
-                registerSection.classList.remove('register-highlight');
-            }, 800);
+                memory[currentAddress][0] = parseInt(dataBusElements[0].textContent);
+                memory[currentAddress][1] = parseInt(dataBusElements[1].textContent);
+                
+                // Update memory table inputs
+                if (currentAddress < 3) {
+                    const memoryInputs = document.querySelectorAll(`#memoryTable tr:nth-child(${currentAddress + 1}) .data-input`);
+                    memoryInputs[0].value = memory[currentAddress][0];
+                    memoryInputs[1].value = memory[currentAddress][1];
+                } else if (currentAddress === 2) {
+                    const memoryInputs = document.querySelectorAll('.output-row .data-input');
+                    memoryInputs[0].value = memory[currentAddress][0];
+                    memoryInputs[1].value = memory[currentAddress][1];
+                }
+                
+                // If writing to address 10 (output port), update external display
+                if (currentAddress === 2) {
+                    updateExternalDisplay();
+                }
+                
+                const addressName = currentAddress === 2 ? 'アドレス10(出力)' : `アドレス${currentAddress.toString(2).padStart(2, '0')}`;
+                document.getElementById('currentOperation').textContent = `REG→${addressName} 書き込み完了`;
+                
+                // Update speech bubbles with operation feedback
+                const cpuSpeech = document.getElementById('cpuSpeech');
+                const memorySpeech = document.getElementById('memorySpeech');
+                const addressBinary = currentAddress.toString(2).padStart(2, '0');
+                
+                cpuSpeech.textContent = `レジスタのデータをアドレス${addressBinary}に書き込み完了！`;
+                memorySpeech.textContent = `アドレス${addressBinary}にデータを受信しました！`;
+                
+                // Reset speech bubbles after 2 seconds
+                setTimeout(() => {
+                    updateCPUSpeech();
+                    updateMemorySpeech();
+                }, 2000);
+                
+                // Animation
+                const dataBus = document.querySelector('.data-bus');
+                dataBus.style.animation = 'pulse 0.5s';
+                setTimeout(() => {
+                    dataBus.style.animation = '';
+                }, 500);
+            }, 300);
         }
 
-        function storeToRegister() {
-            // Store data bus content to register
-            const dataBusElements = document.querySelectorAll('#dataBus .bit');
-            cpuRegister[0] = parseInt(dataBusElements[0].textContent);
-            cpuRegister[1] = parseInt(dataBusElements[1].textContent);
+        function readFromMemory() {
+            // 主記憶 → データバス → REG
             
-            updateCPURegister();
-            document.getElementById('currentOperation').textContent = 'データバス→レジスタ';
+            // Step 1: Load memory data to data bus
+            updateDataBus();
             
-            // Animation
-            const registerSection = document.querySelector('.register-section');
-            registerSection.classList.add('register-highlight');
+            // Step 2: Store data bus content to register
             setTimeout(() => {
-                registerSection.classList.remove('register-highlight');
-            }, 800);
+                const dataBusElements = document.querySelectorAll('#dataBus .bit');
+                cpuRegister[0] = parseInt(dataBusElements[0].textContent);
+                cpuRegister[1] = parseInt(dataBusElements[1].textContent);
+                
+                updateCPURegister();
+                
+                const addressName = currentAddress === 3 ? 'アドレス11(入力)' : 
+                                   currentAddress === 2 ? 'アドレス10(出力)' : 
+                                   `アドレス${currentAddress.toString(2).padStart(2, '0')}`;
+                document.getElementById('currentOperation').textContent = `${addressName}→REG 読み取り完了`;
+                
+                // Update speech bubbles with operation feedback
+                const cpuSpeech = document.getElementById('cpuSpeech');
+                const memorySpeech = document.getElementById('memorySpeech');
+                const addressBinary = currentAddress.toString(2).padStart(2, '0');
+                const dataBinary = memory[currentAddress].join('');
+                
+                cpuSpeech.textContent = `アドレス${addressBinary}からデータ${dataBinary}を読み取り完了！`;
+                memorySpeech.textContent = `アドレス${addressBinary}のデータ${dataBinary}を送信しました！`;
+                
+                // Reset speech bubbles after 2 seconds
+                setTimeout(() => {
+                    updateCPUSpeech();
+                    updateMemorySpeech();
+                }, 2000);
+                
+                // Animation
+                const registerSection = document.querySelector('.register-section');
+                registerSection.classList.add('register-highlight');
+                const dataBus = document.querySelector('.data-bus');
+                dataBus.style.animation = 'pulse 0.5s';
+                
+                setTimeout(() => {
+                    registerSection.classList.remove('register-highlight');
+                    dataBus.style.animation = '';
+                }, 800);
+            }, 300);
         }
 
         function setExternalInput(value) {
             externalInput = value;
+            
+            // Update memory address 11 with input value
+            const inputBinary = value.toString(2).padStart(2, '0');
+            memory[3][0] = parseInt(inputBinary[0]);
+            memory[3][1] = parseInt(inputBinary[1]);
+            
+            // Update memory table inputs for address 11
+            const memoryInputs = document.querySelectorAll('.input-row .data-input');
+            memoryInputs[0].value = memory[3][0];
+            memoryInputs[1].value = memory[3][1];
             
             // Update button states
             document.querySelectorAll('.input-btn').forEach((btn, index) => {
                 btn.classList.toggle('active', index === value);
             });
             
-            // Update display
-            document.getElementById('inputValue').textContent = value.toString(2).padStart(2, '0');
-            updateIODisplay();
+            // Update displays
+            document.getElementById('inputDisplay').textContent = inputBinary;
             
-            // If currently reading from address 11, update data bus
-            if (currentAddress === 3 && !isWriteMode) {
+            // If currently viewing address 11, update data bus
+            if (currentAddress === 3) {
                 updateDataBus();
             }
         }
@@ -832,7 +1124,6 @@
                 [1, 1],  // Address 10: 11
                 [0, 0]   // Address 11: 00
             ];
-            isWriteMode = false;
             cpuRegister = [0, 0];
             externalInput = 0;
             
@@ -848,17 +1139,15 @@
             document.querySelectorAll('.input-btn').forEach((btn, index) => {
                 btn.classList.toggle('active', index === 0);
             });
-            document.getElementById('inputValue').textContent = '00';
+            document.getElementById('inputDisplay').textContent = '00';
             
             // Reset to address 00
             setAddress(0);
             
             document.getElementById('currentOperation').textContent = '待機中';
-            document.getElementById('operationStatus').className = 'status read';
-            document.getElementById('operationStatus').textContent = '読み取りモード';
             
             updateCPURegister();
-            updateIODisplay();
+            updateExternalDisplay();
             updateDataBus();
         }
 
@@ -876,8 +1165,8 @@
         // Initialize
         setAddress(0);
         updateCPURegister();
-        updateIODisplay();
         setExternalInput(0);
+        updateExternalDisplay();
         updateDataBus();
     </script>
 </body>
