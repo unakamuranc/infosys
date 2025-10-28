@@ -672,6 +672,234 @@
             50% { text-shadow: 0 0 15px #81c784, 0 0 25px #4caf50; }
             100% { text-shadow: 0 0 5px #4caf50; }
         }
+
+        /* スマホ対応レスポンシブデザイン */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* メインレイアウトを縦並びに変更 */
+            .simulation-area {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                min-height: auto;
+            }
+
+            .cpu-section, .memory-section {
+                width: 100%;
+                max-width: 350px;
+                padding: 15px;
+            }
+
+            .bus-area {
+                width: 100%;
+                max-width: 350px;
+                order: 2; /* CPUとメモリの間に配置 */
+            }
+
+            .memory-section {
+                order: 3;
+            }
+
+            /* 外部デバイスエリアの調整 */
+            .external-devices {
+                flex-direction: row;
+                justify-content: space-around;
+                margin: 20px 0;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .external-output, .external-input {
+                margin-top: 0;
+                margin-bottom: 10px;
+                min-width: 140px;
+                flex: 1;
+                max-width: 160px;
+            }
+
+            /* ボタンサイズ調整 */
+            .address-buttons {
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .address-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-width: 35px;
+            }
+
+            .input-buttons {
+                gap: 4px;
+            }
+
+            .input-btn {
+                padding: 4px 6px;
+                font-size: 10px;
+                min-width: 24px;
+            }
+
+            /* テーブル調整 */
+            .memory-table {
+                font-size: 12px;
+            }
+
+            .memory-table th, .memory-table td {
+                padding: 6px 4px;
+            }
+
+            .data-input {
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+            }
+
+            /* ビット表示の調整 */
+            .bit {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .register-bit {
+                width: 35px;
+                height: 35px;
+            }
+
+            /* ディスプレイ関連 */
+            .output-screen, .input-display {
+                font-size: 14px;
+                min-width: 30px;
+                padding: 4px 8px;
+            }
+
+            /* ラベル調整 */
+            .output-label, .input-label {
+                font-size: 11px;
+            }
+
+            /* 吹き出し調整 */
+            .cpu-speech, .memory-speech {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            /* コントロールボタン */
+            .control-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                margin: 3px;
+            }
+
+            .register-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            /* 情報パネル */
+            .info-panel {
+                padding: 15px;
+                margin-top: 15px;
+            }
+
+            .info-title {
+                font-size: 14px;
+            }
+
+            #usageContent p {
+                font-size: 12px;
+                margin: 8px 0;
+            }
+
+            /* I/Oインジケーター調整 */
+            .io-indicator {
+                font-size: 14px;
+            }
+
+            /* CPU/メモリタイトル */
+            .cpu-title, .memory-title {
+                font-size: 16px;
+            }
+
+            /* キャラクター調整 */
+            .character {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            /* バスラベル調整 */
+            .bus-label {
+                font-size: 12px;
+                top: -20px;
+            }
+
+            /* レジスタタイトル調整 */
+            .register-title {
+                font-size: 14px;
+            }
+
+            /* 入力デバイスタイトル */
+            .input-device-title {
+                font-size: 14px;
+            }
+        }
+
+        /* 非常に小さな画面（320px以下）対応 */
+        @media (max-width: 320px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .cpu-section, .memory-section, .bus-area {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .external-devices {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .external-output, .external-input {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .address-buttons {
+                justify-content: center;
+            }
+
+            .bit {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+
+            .data-input {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
