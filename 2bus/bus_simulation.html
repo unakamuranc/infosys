@@ -809,30 +809,21 @@
             </div>
         </div>
 
-
-
-
-                <div class="output-label">� 出力装置(アドレス10)</div>
-                <div class="output-screen" id="externalDisplay">11</div>
-            </div>
-
-
-
-
-
         <div class="controls">
             <button class="control-btn" onclick="resetSimulation()">🔄 リセット</button>
         </div>
 
         <div class="info-panel">
-            <div class="info-title">📚 使い方</div>
-            <p><strong>1. アドレス選択:</strong> アドレスバス下のボタン（00, 01, 10, 11）でアクセス先を指定</p>
-            <p><strong>2. 主記憶→REG:</strong> 選択したアドレスからレジスタにデータを読み込み</p>
-            <p><strong>3. REG→主記憶:</strong> レジスタから選択したアドレスにデータを書き込み</p>
-            <p><strong>4. データバス:</strong> 現在選択されているアドレスの内容を常時表示</p>
-            <p><strong>5. 外部入力:</strong> 入力装置のボタンでアドレス11に値を送信（線で接続）</p>
-            <p><strong>6. 外部出力:</strong> アドレス10のデータが出力装置に表示される（線で接続）</p>
-            <p><strong>7. データ編集:</strong> 主記憶テーブル（00-10）の入力欄で直接0/1を変更可能</p>
+            <div class="info-title" onclick="toggleUsageInfo()" style="cursor: pointer;">📚 使い方 <span id="toggleIcon">▼</span></div>
+            <div id="usageContent" style="display: none;">
+                <p><strong>1. アドレス選択:</strong> アドレスバス下のボタン（00, 01, 10, 11）でアクセス先を指定</p>
+                <p><strong>2. 主記憶→REG:</strong> 選択したアドレスからレジスタにデータを読み込み</p>
+                <p><strong>3. REG→主記憶:</strong> レジスタから選択したアドレスにデータを書き込み</p>
+                <p><strong>4. データバス:</strong> 現在選択されているアドレスの内容を常時表示</p>
+                <p><strong>5. 外部入力:</strong> 入力装置のボタンでアドレス11に値を送信（線で接続）</p>
+                <p><strong>6. 外部出力:</strong> アドレス10のデータが出力装置に表示される（線で接続）</p>
+                <p><strong>7. データ編集:</strong> 主記憶テーブル（00-10）の入力欄で直接0/1を変更可能</p>
+            </div>
         </div>
     </div>
 
@@ -1161,6 +1152,20 @@
             }
         `;
         document.head.appendChild(style);
+
+        // Toggle usage info panel
+        function toggleUsageInfo() {
+            const content = document.getElementById('usageContent');
+            const icon = document.getElementById('toggleIcon');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▼';
+            }
+        }
 
         // Initialize
         setAddress(0);
