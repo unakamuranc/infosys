@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA暗号：現代社会を支える数理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- MathJaxの読み込み：TeX数式をレンダリングするためのスクリプト -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* デザイン・セットアップ */
+        :root {
+            --primary-bg: #0a192f;
+            --accent-gold: #c5a059;
+            --text-ivory: #f3f0df;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --font-main: 'Noto Sans JP', sans-serif;
+            --font-title: 'Merriweather', serif;
+        }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; background-color: #222; display: flex; flex-direction: column; align-items: center; gap: 40px; padding: 40px 0; }
+
+        .slide-container {
+            width: 1280px; height: 720px;
+            background-color: var(--primary-bg);
+            color: var(--text-ivory);
+            font-family: var(--font-main);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 60px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            scroll-snap-align: start;
+        }
+
+        /* 背景装飾：幾何学模様 */
+        .slide-container::before {
+            content: ''; position: absolute; top: -10%; right: -10%; width: 40%; height: 40%;
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        /* タイトル・共通パーツ */
+        .slide-title {
+            font-family: var(--font-title);
+            font-size: 48px; font-weight: 700; color: var(--accent-gold);
+            margin: 0 0 40px 0; border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 15px; width: fit-content; z-index: 1;
+        }
+
+        .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; z-index: 1; }
+
+        p, li { font-size: 24px; line-height: 1.6; margin-bottom: 15px; }
+        h3 { font-size: 32px; color: var(--accent-gold); margin-bottom: 20px; }
+
+        /* レイアウト：2列タイル */
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .tile { background: var(--card-bg); padding: 30px; border-radius: 12px; border-left: 5px solid var(--accent-gold); }
+
+        /* 画像・ラッパー */
+        .image-wrapper { width: 100%; height: 400px; border-radius: 12px; overflow: hidden; border: 1px solid var(--accent-gold); }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .image-contain img { object-fit: contain; background: #fff; }
+
+        /* 特殊：Bleed Image */
+        .bleed-image-layout { padding: 0 !important; display: grid !important; grid-template-columns: 1fr 1fr; align-items: start; }
+        .bleed-text-side { padding: 60px; display: flex; flex-direction: column; justify-content: center; height: 100%; }
+        .bleed-image-side { width: 100%; height: 720px; object-fit: cover; }
+
+        /* チャート・テーブル */
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); }
+        th, td { padding: 20px; border: 1px solid rgba(197, 160, 89, 0.3); font-size: 22px; text-align: left; }
+        th { background: rgba(197, 160, 89, 0.2); color: var(--accent-gold); }
+
+        .highlight-number { font-size: 120px; font-weight: 700; color: var(--accent-gold); font-family: var(--font-title); }
+        .formula-container { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; }
+        
+        /* アイコン */
+        .icon-box { font-size: 60px; color: var(--accent-gold); margin-bottom: 20px; }
+
+        /* MathJaxの調整 */
+        .mjx-chtml { color: var(--accent-gold) !important; }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title Slide -->
+<div class="slide-container" id="slide1" style="justify-content: center; text-align: center; background: radial-gradient(circle at center, #1a365d 0%, #0a192f 100%);">
+    <h1 style="font-size: 80px; color: var(--accent-gold); font-family: var(--font-title); margin: 0;">RSA暗号のすべて</h1>
+    <p style="font-size: 32px; letter-spacing: 5px; opacity: 0.8; margin-top: 20px;">基礎理論から量子計算機への備えまで</p>
+    <div style="margin-top: 50px; border-top: 1px solid var(--accent-gold); width: 300px; margin-left: auto; margin-right: auto; padding-top: 20px;">
+        <p style="font-size: 20px;">Rivest / Shamir / Adleman (1977)</p>
+    </div>
+</div>
+
+<!-- Slide 2: Section Title -->
+<div class="slide-container" id="slide2" style="justify-content: center; text-align: center;">
+    <div style="border: 2px solid var(--accent-gold); padding: 40px; display: inline-block;">
+        <h2 style="font-size: 60px; margin: 0;">Part 1:<br>公開鍵暗号の基本</h2>
+    </div>
+</div>
+
+<!-- Slide 3: Two Column Tiled Text -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">公開鍵と秘密鍵の考え方</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="tile">
+                <div class="icon-box"><i class="fa-solid fa-unlock"></i></div>
+                <h3>公開鍵 (Public Key)</h3>
+                <p>誰にでも見せてよい鍵。情報の「暗号化」や署名の「検証」に使用します。例えるなら、誰でも閉められる南京錠のようなものです。</p>
+            </div>
+            <div class="tile">
+                <div class="icon-box"><i class="fa-solid fa-key"></i></div>
+                <h3>秘密鍵 (Private Key)</h3>
+                <p>本人だけが厳重に保管する鍵。暗号の「復号」や「署名」に使用します。この鍵を持っている人だけが宝箱を開けられます。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Bleed Image Right -->
+<div class="slide-container bleed-image-layout" id="slide4">
+    <div class="bleed-text-side">
+        <h2 class="slide-title">安全性の根拠</h2>
+        <h3>素因数分解の困難さ</h3>
+        <p>RSA暗号の強固さは「巨大な数字の掛け算は簡単だが、分解（素因数分解）は極めて難しい」という数学的な非対称性に依存しています。</p>
+        <p>数千桁の数となると、スパコンを使っても数万年かかる計算量となります。</p>
+    </div>
+    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800" class="bleed-image-side" alt="Mathematics on chalkboard">
+</div>
+
+<!-- Slide 5: Styled Bullet Points -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">RSAを構成する要素</h2>
+    <div class="content-area">
+        <div style="background: var(--card-bg); padding: 40px; border-radius: 20px;">
+            <ul style="list-style: none; padding: 0;">
+                <li><i class="fa-solid fa-circle-check" style="color:var(--accent-gold); margin-right:15px;"></i><strong>法 $n$：</strong> 2つの巨大な素数 $p, q$ の積。これは公開されます。</li>
+                <li><i class="fa-solid fa-circle-check" style="color:var(--accent-gold); margin-right:15px;"></i><strong>公開指数 $e$：</strong> 暗号化に使う値。$n$ とセットで「公開鍵」となります。</li>
+                <li><i class="fa-solid fa-circle-check" style="color:var(--accent-gold); margin-right:15px;"></i><strong>秘密指数 $d$：</strong> 復号に使う値。これを知ることが攻撃者の目標です。</li>
+                <li><i class="fa-solid fa-circle-check" style="color:var(--accent-gold); margin-right:15px;"></i><strong>オイラー関数 $\phi(n)$：</strong> $(p-1)(q-1)$。秘密鍵を算出するために不可欠な中間値です。</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Doughnut Chart -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">計算コストの非対称性</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 300px; height: 300px; border-radius: 50%; background: conic-gradient(var(--accent-gold) 0% 1%, #333 1% 100%); position: relative; display: flex; align-items: center; justify-content: center; border: 10px solid #222;">
+                    <div style="width: 200px; height: 200px; background: var(--primary-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--accent-gold);">
+                        1% vs 99%
+                    </div>
+                </div>
+                <p style="margin-top: 20px; text-align: center;">暗号化・復号のコスト (小)<br>vs 鍵破りのコスト (無限大)</p>
+            </div>
+            <div>
+                <h3>効率的な運用</h3>
+                <p>正規のユーザーにとって、べき乗計算（mod演算）は一瞬で終わる処理です。</p>
+                <p>一方で、鍵を持たない第三者が $n$ から $d$ を求めるには、$n$ を素因数分解する必要があります。この計算コストの極端な差が、現代のインターネット通信を保護しています。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Formulas -->
+<div class="slide-container" id="slide7">
+    <h2 class="slide-title">RSAの基本数式</h2>
+    <div class="content-area" style="text-align: center;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+            <div class="tile">
+                <h3>暗号化</h3>
+                <div class="formula-container">
+                    <p style="font-size: 40px;">$c \equiv m^e \pmod n$</p>
+                </div>
+                <p>平文 $m$ を $e$ 乗する</p>
+            </div>
+            <div class="tile">
+                <h3>復号</h3>
+                <div class="formula-container">
+                    <p style="font-size: 40px;">$m \equiv c^d \pmod n$</p>
+                </div>
+                <p>暗号文 $c$ を $d$ 乗する</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Section Title 2 -->
+<div class="slide-container" id="slide8" style="justify-content: center; text-align: center;">
+    <div style="border: 2px solid var(--accent-gold); padding: 40px; display: inline-block;">
+        <h2 style="font-size: 60px; margin: 0;">Part 2:<br>手を動かして作るRSA</h2>
+    </div>
+</div>
+
+<!-- Slide 9: Table Layout -->
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">具体例によるステップ解説</h2>
+    <div class="content-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>手順</th>
+                    <th>計算内容</th>
+                    <th>結果</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. 素数の選択</td>
+                    <td>$p=11, q=13$</td>
+                    <td>$p, q$ を決定</td>
+                </tr>
+                <tr>
+                    <td>2. 法の計算</td>
+                    <td>$n = 11 \times 13$</td>
+                    <td>$n = \mathbf{143}$</td>
+                </tr>
+                <tr>
+                    <td>3. 中間値の計算</td>
+                    <td>$\phi(n) = (11-1)(13-1)$</td>
+                    <td>$\phi(n) = \mathbf{120}$</td>
+                </tr>
+                <tr>
+                    <td>4. 指数の決定</td>
+                    <td>$\gcd(e, 120)=1$ となる $e$ を選ぶ</td>
+                    <td>$e = \mathbf{7}$</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 10: Highlighted Numbers -->
+<div class="slide-container" id="slide10">
+    <h2 class="slide-title">秘密鍵 $d$ の算出</h2>
+    <div class="content-area">
+        <div class="two-column" style="align-items: center;">
+            <div style="text-align: center;">
+                <p>秘密指数 $d$：</p>
+                <div class="highlight-number">103</div>
+                <p>$7 \times d \equiv 1 \pmod{120}$ の解</p>
+            </div>
+            <div class="tile">
+                <h3>鍵のセット完成</h3>
+                <p><strong>公開鍵：</strong> $(143, 7)$</p>
+                <p><strong>秘密鍵：</strong> $d = 103$</p>
+                <p style="font-style: italic; color: #888;">「逆元を探す」という数学的な操作が、暗号の世界では「鍵を作る」ことに相当します。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: Real Calculation -->
+<div class="slide-container" id="slide11">
+    <h2 class="slide-title">実際に計算してみる</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <p>メッセージ $m = 5$ を送る場合：</p>
+                <div class="tile" style="margin-bottom: 20px;">
+                    <p><strong>暗号化：</strong> $5^7 \div 143$ の余り = <strong style="color:var(--accent-gold);">47</strong></p>
+                </div>
+                <div class="tile">
+                    <p><strong>復号：</strong> $47^{103} \div 143$ の余り = <strong style="color:var(--accent-gold);">5</strong></p>
+                </div>
+                <p style="margin-top: 20px;">見事に元のメッセージ $5$ に戻りました。</p>
+            </div>
+            <div class="image-wrapper image-contain">
+                <img src="https://images.unsplash.com/photo-1512758017271-d7b84c2113f1?auto=format&fit=crop&q=80&w=800" alt="Cybersecurity lock">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12: Section Title 3 -->
+<div class="slide-container" id="slide12" style="justify-content: center; text-align: center;">
+    <div style="border: 2px solid var(--accent-gold); padding: 40px; display: inline-block;">
+        <h2 style="font-size: 60px; margin: 0;">Part 3:<br>暗号と署名の応用</h2>
+    </div>
+</div>
+
+<!-- Slide 13: Two Faces of RSA -->
+<div class="slide-container" id="slide13">
+    <h2 class="slide-title">RSAの2つの顔</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="tile">
+                <div class="icon-box"><i class="fa-solid fa-user-secret"></i></div>
+                <h3>秘密通信 (暗号化)</h3>
+                <p><strong>目的：</strong> 中身を隠す。<br><strong>鍵の使い方：</strong> 受信者の公開鍵でロックし、受信者の秘密鍵で開ける。</p>
+            </div>
+            <div class="tile">
+                <div class="icon-box"><i class="fa-solid fa-file-signature"></i></div>
+                <h3>電子署名 (本人確認)</h3>
+                <p><strong>目的：</strong> 本人を証明する。<br><strong>鍵の使い方：</strong> 送信者の秘密鍵で作成し、送信者の公開鍵で誰でも検証できる。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 14: Encryption -->
+<div class="slide-container" id="slide14">
+    <h2 class="slide-title">データの秘匿（暗号化）</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="tile">
+                <p>1. 送信者は受信者の「公開鍵」を取得。</p>
+                <p>2. その鍵でデータを暗号化して送信。</p>
+                <p>3. 受信者は自分だけが持つ「秘密鍵」で解読。</p>
+                <p style="color: var(--accent-gold);">→ 途中で盗まれても、秘密鍵がない限り中身は読めません。</p>
+            </div>
+            <div class="image-wrapper">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" alt="Binary code">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 15: Signature -->
+<div class="slide-container" id="slide15">
+    <h2 class="slide-title">本人の証明（電子署名）</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div class="tile">
+                <p>1. 送信者は自分の「秘密鍵」で署名を作成。</p>
+                <p>2. 受信者は送信者の「公開鍵」で検証。</p>
+                <p>3. 数式が一致すれば、本人が書いたことが確定。</p>
+                <p style="color: var(--accent-gold);">→ 「内容が改ざんされていないこと」も同時に保証されます。</p>
+            </div>
+            <div class="image-wrapper">
+                <img src="https://images.unsplash.com/photo-1557591954-463289063261?auto=format&fit=crop&q=80&w=800" alt="Signature verification">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 16: Table Comparison -->
+<div class="slide-container" id="slide16">
+    <h2 class="slide-title">暗号と署名のマトリクス</h2>
+    <div class="content-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>機能</th>
+                    <th>使用する鍵</th>
+                    <th>保証するもの</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>秘密通信</strong></td>
+                    <td>受信者の公開鍵</td>
+                    <td>機密性（中身がバレない）</td>
+                </tr>
+                <tr>
+                    <td><strong>電子署名</strong></td>
+                    <td>送信者の秘密鍵</td>
+                    <td>真正性（本人が書いた）・完全性</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 30px; text-align: center; color: var(--accent-gold);">「誰の鍵で何をするか」の違いだけですが、その社会的価値は全く異なります。</p>
+    </div>
+</div>
+
+<!-- Slide 17: Hybrid Encryption -->
+<div class="slide-container" id="slide17" style="justify-content: center;">
+    <div class="content-area" style="text-align: center; max-width: 900px; margin: 0 auto;">
+        <i class="fa-solid fa-quote-left" style="font-size: 80px; color: var(--accent-gold); opacity: 0.3;"></i>
+        <h2 style="font-size: 40px; font-family: var(--font-title); line-height: 1.5;">
+            RSAは非常に強力だが、計算が重い。<br>
+            実務では、RSAで「共通鍵」を渡し、<br>
+            本文は高速なAES等で暗号化する。<br>
+            これが現代の「ハイブリッド暗号」である。
+        </h2>
+    </div>
+</div>
+
+<!-- Slide 18: Quantum Threat -->
+<div class="slide-container bleed-image-layout" id="slide18">
+    <div class="bleed-text-side">
+        <h2 class="slide-title">未来への脅威</h2>
+        <h3>量子計算機とShorのアルゴリズム</h3>
+        <p>1994年、ピーター・ショアは量子計算機を使えば、巨大な数の素因数分解を高速に行えることを証明しました。</p>
+        <p>実用的な量子計算機が完成すれば、現在のRSA暗号はすべて「無効」となります。</p>
+    </div>
+    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800" class="bleed-image-side" alt="Quantum technology">
+</div>
+
+<!-- Slide 19: PQC -->
+<div class="slide-container" id="slide19">
+    <h2 class="slide-title">ポスト量子暗号 (PQC) への移行</h2>
+    <div class="content-area">
+        <div class="two-column">
+            <div>
+                <div class="tile">
+                    <h3>格子暗号 (Lattice-based)</h3>
+                    <p>量子計算機でも解くのが難しいとされる、多次元格子の最短ベクトル問題などを利用した次世代の暗号です。</p>
+                </div>
+                <p style="margin-top: 20px;">現在、世界中で標準化が進められており、私たちは「暗号の歴史」の大きな転換点にいます。</p>
+            </div>
+            <div class="image-wrapper">
+                <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=800" alt="Mathematical abstraction">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 20: Summary -->
+<div class="slide-container" id="slide20" style="justify-content: center; text-align: center;">
+    <h2 class="slide-title" style="margin-left: auto; margin-right: auto;">まとめ</h2>
+    <div class="content-area">
+        <ul style="list-style: none; padding: 0; display: inline-block; text-align: left;">
+            <li style="margin-bottom: 25px;"><i class="fa-solid fa-check" style="color:var(--accent-gold); margin-right:15px;"></i>RSAは「素因数分解の困難さ」に基づく最初の公開鍵暗号。</li>
+            <li style="margin-bottom: 25px;"><i class="fa-solid fa-check" style="color:var(--accent-gold); margin-right:15px;"></i>暗号化（秘密を守る）と署名（信頼を証明する）の双方を実現。</li>
+            <li style="margin-bottom: 25px;"><i class="fa-solid fa-check" style="color:var(--accent-gold); margin-right:15px;"></i>実務では計算効率のため「ハイブリッド方式」で利用される。</li>
+            <li style="margin-bottom: 25px;"><i class="fa-solid fa-check" style="color:var(--accent-gold); margin-right:15px;"></i>量子計算時代の到来に備え、新たな「耐量子暗号」への移行が始まっている。</li>
+        </ul>
+        <div style="margin-top: 50px;">
+            <h3 style="font-family: var(--font-title); color: #fff;">ご清聴ありがとうございました</h3>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
