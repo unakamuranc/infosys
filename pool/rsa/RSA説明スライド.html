@@ -100,12 +100,26 @@
 
         /* MathJaxの調整 */
         .mjx-chtml { color: var(--accent-gold) !important; }
+
+        /* スライド番号 */
+        .slide-container::after {
+            content: attr(data-slide-number);
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-family: var(--font-title);
+            z-index: 10;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
 
 <!-- Slide 1: Title Slide -->
-<div class="slide-container" id="slide1" style="justify-content: center; text-align: center; background: radial-gradient(circle at center, #1a365d 0%, #0a192f 100%);">
+<div class="slide-container" id="slide1" data-slide-number="1" style="justify-content: center; text-align: center; background: radial-gradient(circle at center, #1a365d 0%, #0a192f 100%);">
     <h1 style="font-size: 80px; color: var(--accent-gold); font-family: var(--font-title); margin: 0;">RSA暗号のすべて</h1>
     <p style="font-size: 32px; letter-spacing: 5px; opacity: 0.8; margin-top: 20px;">基礎理論から量子計算機への備えまで</p>
     <div style="margin-top: 50px; border-top: 1px solid var(--accent-gold); width: 300px; margin-left: auto; margin-right: auto; padding-top: 20px;">
@@ -114,14 +128,14 @@
 </div>
 
 <!-- Slide 2: Section Title -->
-<div class="slide-container" id="slide2" style="justify-content: center; text-align: center;">
+<div class="slide-container" id="slide2" data-slide-number="2" style="justify-content: center; text-align: center;">
     <div style="border: 2px solid var(--accent-gold); padding: 40px; display: inline-block;">
         <h2 style="font-size: 60px; margin: 0;">Part 1:<br>公開鍵暗号の基本</h2>
     </div>
 </div>
 
 <!-- Slide 3: Two Column Tiled Text -->
-<div class="slide-container" id="slide3">
+<div class="slide-container" id="slide3" data-slide-number="3">
     <h2 class="slide-title">公開鍵と秘密鍵の考え方</h2>
     <div class="content-area">
         <div class="two-column">
@@ -140,7 +154,7 @@
 </div>
 
 <!-- Slide 4: Bleed Image Right -->
-<div class="slide-container bleed-image-layout" id="slide4">
+<div class="slide-container bleed-image-layout" id="slide4" data-slide-number="4">
     <div class="bleed-text-side">
         <h2 class="slide-title">安全性の根拠</h2>
         <h3>素因数分解の困難さ</h3>
@@ -151,7 +165,7 @@
 </div>
 
 <!-- Slide 5: Styled Bullet Points -->
-<div class="slide-container" id="slide5">
+<div class="slide-container" id="slide5" data-slide-number="5">
     <h2 class="slide-title">RSAを構成する要素</h2>
     <div class="content-area">
         <div style="background: var(--card-bg); padding: 40px; border-radius: 20px;">
@@ -165,8 +179,93 @@
     </div>
 </div>
 
-<!-- Slide 6: Doughnut Chart -->
-<div class="slide-container" id="slide6">
+<!-- Slide 6: ASCII Mapping -->
+<div class="slide-container" id="slide6" data-slide-number="6">
+    <h2 class="slide-title">具体例："AI" を数値化して処理</h2>
+    <div class="content-area">
+        <p>提案した鍵ペア <strong>公開鍵：(e=17, n=77)</strong> と <strong>秘密鍵：d=53</strong> を使い、文字列"AI"を数値として処理してみます。</p>
+        <div class="two-column">
+            <div class="tile">
+                <h3>1. 文字を数値化 (ASCII)</h3>
+                <p><strong>A</strong> = 65</p>
+                <p><strong>I</strong> = 73</p>
+                <p style="font-size: 18px; opacity: 0.7;">※法 $n=77$ より小さい値である必要があります。</p>
+            </div>
+            <div class="tile">
+                <h3>2. 使用する鍵セット</h3>
+                <p><strong>公開鍵：</strong> $(17, 77)$</p>
+                <p><strong>秘密鍵：</strong> $d = 53$</p>
+                <p style="font-size: 18px; opacity: 0.7;">$e=17$ は2進数で 10001 です。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Private Key Processing -->
+<div class="slide-container" id="slide7" data-slide-number="7">
+    <h2 class="slide-title">秘密鍵 $d$ での「暗号化」計算</h2>
+    <div class="content-area">
+        <p>電子署名のように、本人しか持たない秘密鍵 $d=53$ で計算を行います。</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>文字</th>
+                    <th>数値 $m$</th>
+                    <th>計算式：$c \equiv m^{53} \pmod{77}$</th>
+                    <th>結果 $c$</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A</td>
+                    <td>65</td>
+                    <td>$65^{53} \pmod{77}$</td>
+                    <td><strong>32</strong></td>
+                </tr>
+                <tr>
+                    <td>I</td>
+                    <td>73</td>
+                    <td>$73^{53} \pmod{77}$</td>
+                    <td><strong>68</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 20px;">この数値 32 と 68 が、署名データとして送出されます。</p>
+    </div>
+</div>
+
+<!-- Slide 8: Public Key Processing -->
+<div class="slide-container" id="slide8" data-slide-number="8">
+    <h2 class="slide-title">公開鍵 $e$ での「復号」検証</h2>
+    <div class="content-area">
+        <p>受け取った側は、公開されている鍵 $e=17$ を使って元の数値に戻るか確認します。</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>受信データ $c$</th>
+                    <th>算出式：$m \equiv c^{17} \pmod{77}$</th>
+                    <th>復号結果 $m$</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>32</td>
+                    <td>$32^{17} \pmod{77}$</td>
+                    <td><strong>65</strong> (A)</td>
+                </tr>
+                <tr>
+                    <td>68</td>
+                    <td>$68^{17} \pmod{77}$</td>
+                    <td><strong>73</strong> (I)</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="margin-top: 20px;">元の "AI" に戻りました。$e=17$ (10001) のべき乗計算は、わずか5回のステップで行えます。</p>
+    </div>
+</div>
+
+<!-- Slide 9: Doughnut Chart -->
+<div class="slide-container" id="slide9" data-slide-number="9">
     <h2 class="slide-title">計算コストの非対称性</h2>
     <div class="content-area">
         <div class="two-column">
@@ -187,8 +286,8 @@
     </div>
 </div>
 
-<!-- Slide 7: Formulas -->
-<div class="slide-container" id="slide7">
+<!-- Slide 10: Formulas -->
+<div class="slide-container" id="slide10" data-slide-number="10">
     <h2 class="slide-title">RSAの基本数式</h2>
     <div class="content-area" style="text-align: center;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
@@ -210,15 +309,15 @@
     </div>
 </div>
 
-<!-- Slide 8: Section Title 2 -->
-<div class="slide-container" id="slide8" style="justify-content: center; text-align: center;">
+<!-- Slide 11: Section Title 2 -->
+<div class="slide-container" id="slide11" data-slide-number="11" style="justify-content: center; text-align: center;">
     <div style="border: 2px solid var(--accent-gold); padding: 40px; display: inline-block;">
         <h2 style="font-size: 60px; margin: 0;">Part 2:<br>手を動かして作るRSA</h2>
     </div>
 </div>
 
-<!-- Slide 9: Table Layout -->
-<div class="slide-container" id="slide9">
+<!-- Slide 12: Table Layout -->
+<div class="slide-container" id="slide12" data-slide-number="12">
     <h2 class="slide-title">具体例によるステップ解説</h2>
     <div class="content-area">
         <table>
@@ -232,61 +331,61 @@
             <tbody>
                 <tr>
                     <td>1. 素数の選択</td>
-                    <td>$p=11, q=13$</td>
+                    <td>$p=7, q=11$</td>
                     <td>$p, q$ を決定</td>
                 </tr>
                 <tr>
                     <td>2. 法の計算</td>
-                    <td>$n = 11 \times 13$</td>
-                    <td>$n = \mathbf{143}$</td>
+                    <td>$n = 7 \times 11$</td>
+                    <td>$n = \mathbf{77}$</td>
                 </tr>
                 <tr>
                     <td>3. 中間値の計算</td>
-                    <td>$\phi(n) = (11-1)(13-1)$</td>
-                    <td>$\phi(n) = \mathbf{120}$</td>
+                    <td>$\phi(n) = (7-1)(11-1)$</td>
+                    <td>$\phi(n) = \mathbf{60}$</td>
                 </tr>
                 <tr>
                     <td>4. 指数の決定</td>
-                    <td>$\gcd(e, 120)=1$ となる $e$ を選ぶ</td>
-                    <td>$e = \mathbf{7}$</td>
+                    <td>$\gcd(e, 60)=1$ となる $e$ を選ぶ</td>
+                    <td>$e = \mathbf{17}$</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Slide 10: Highlighted Numbers -->
-<div class="slide-container" id="slide10">
+<!-- Slide 13: Highlighted Numbers -->
+<div class="slide-container" id="slide13" data-slide-number="13">
     <h2 class="slide-title">秘密鍵 $d$ の算出</h2>
     <div class="content-area">
         <div class="two-column" style="align-items: center;">
             <div style="text-align: center;">
                 <p>秘密指数 $d$：</p>
-                <div class="highlight-number">103</div>
-                <p>$7 \times d \equiv 1 \pmod{120}$ の解</p>
+                <div class="highlight-number">53</div>
+                <p>$17 \times d \equiv 1 \pmod{60}$ の解</p>
             </div>
             <div class="tile">
                 <h3>鍵のセット完成</h3>
-                <p><strong>公開鍵：</strong> $(143, 7)$</p>
-                <p><strong>秘密鍵：</strong> $d = 103$</p>
+                <p><strong>公開鍵：</strong> $(77, 17)$</p>
+                <p><strong>秘密鍵：</strong> $d = 53$</p>
                 <p style="font-style: italic; color: #888;">「逆元を探す」という数学的な操作が、暗号の世界では「鍵を作る」ことに相当します。</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Slide 11: Real Calculation -->
-<div class="slide-container" id="slide11">
+<!-- Slide 14: Real Calculation -->
+<div class="slide-container" id="slide14" data-slide-number="14">
     <h2 class="slide-title">実際に計算してみる</h2>
     <div class="content-area">
         <div class="two-column">
             <div>
                 <p>メッセージ $m = 5$ を送る場合：</p>
                 <div class="tile" style="margin-bottom: 20px;">
-                    <p><strong>暗号化：</strong> $5^7 \div 143$ の余り = <strong style="color:var(--accent-gold);">47</strong></p>
+                    <p><strong>暗号化：</strong> $5^{17} \div 77$ の余り = <strong style="color:var(--accent-gold);">3</strong></p>
                 </div>
                 <div class="tile">
-                    <p><strong>復号：</strong> $47^{103} \div 143$ の余り = <strong style="color:var(--accent-gold);">5</strong></p>
+                    <p><strong>復号：</strong> $3^{53} \div 77$ の余り = <strong style="color:var(--accent-gold);">5</strong></p>
                 </div>
                 <p style="margin-top: 20px;">見事に元のメッセージ $5$ に戻りました。</p>
             </div>
@@ -297,15 +396,15 @@
     </div>
 </div>
 
-<!-- Slide 12: Section Title 3 -->
-<div class="slide-container" id="slide12" style="justify-content: center; text-align: center;">
+<!-- Slide 15: Intro Part 3 -->
+<div class="slide-container" id="slide15" data-slide-number="15" style="justify-content: center; text-align: center;">
     <div style="border: 2px solid var(--accent-gold); padding: 40px; display: inline-block;">
         <h2 style="font-size: 60px; margin: 0;">Part 3:<br>暗号と署名の応用</h2>
     </div>
 </div>
 
-<!-- Slide 13: Two Faces of RSA -->
-<div class="slide-container" id="slide13">
+<!-- Slide 16: Two Faces of RSA -->
+<div class="slide-container" id="slide16" data-slide-number="16">
     <h2 class="slide-title">RSAの2つの顔</h2>
     <div class="content-area">
         <div class="two-column">
@@ -323,8 +422,8 @@
     </div>
 </div>
 
-<!-- Slide 14: Encryption -->
-<div class="slide-container" id="slide14">
+<!-- Slide 17: Encryption -->
+<div class="slide-container" id="slide17" data-slide-number="17">
     <h2 class="slide-title">データの秘匿（暗号化）</h2>
     <div class="content-area">
         <div class="two-column">
@@ -341,8 +440,8 @@
     </div>
 </div>
 
-<!-- Slide 15: Signature -->
-<div class="slide-container" id="slide15">
+<!-- Slide 18: Signature -->
+<div class="slide-container" id="slide18" data-slide-number="18">
     <h2 class="slide-title">本人の証明（電子署名）</h2>
     <div class="content-area">
         <div class="two-column">
@@ -359,8 +458,8 @@
     </div>
 </div>
 
-<!-- Slide 16: Table Comparison -->
-<div class="slide-container" id="slide16">
+<!-- Slide 19: Table Comparison -->
+<div class="slide-container" id="slide19" data-slide-number="19">
     <h2 class="slide-title">暗号と署名のマトリクス</h2>
     <div class="content-area">
         <table>
@@ -388,8 +487,8 @@
     </div>
 </div>
 
-<!-- Slide 17: Hybrid Encryption -->
-<div class="slide-container" id="slide17" style="justify-content: center;">
+<!-- Slide 20: Hybrid Encryption -->
+<div class="slide-container" id="slide20" data-slide-number="20" style="justify-content: center;">
     <div class="content-area" style="text-align: center; max-width: 900px; margin: 0 auto;">
         <i class="fa-solid fa-quote-left" style="font-size: 80px; color: var(--accent-gold); opacity: 0.3;"></i>
         <h2 style="font-size: 40px; font-family: var(--font-title); line-height: 1.5;">
@@ -401,8 +500,8 @@
     </div>
 </div>
 
-<!-- Slide 18: Quantum Threat -->
-<div class="slide-container bleed-image-layout" id="slide18">
+<!-- Slide 21: Quantum Threat -->
+<div class="slide-container bleed-image-layout" id="slide21" data-slide-number="21">
     <div class="bleed-text-side">
         <h2 class="slide-title">未来への脅威</h2>
         <h3>量子計算機とShorのアルゴリズム</h3>
@@ -412,8 +511,8 @@
     <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800" class="bleed-image-side" alt="Quantum technology">
 </div>
 
-<!-- Slide 19: PQC -->
-<div class="slide-container" id="slide19">
+<!-- Slide 22: PQC -->
+<div class="slide-container" id="slide22" data-slide-number="22">
     <h2 class="slide-title">ポスト量子暗号 (PQC) への移行</h2>
     <div class="content-area">
         <div class="two-column">
@@ -431,8 +530,8 @@
     </div>
 </div>
 
-<!-- Slide 20: Summary -->
-<div class="slide-container" id="slide20" style="justify-content: center; text-align: center;">
+<!-- Slide 23: Summary -->
+<div class="slide-container" id="slide23" data-slide-number="23" style="justify-content: center; text-align: center;">
     <h2 class="slide-title" style="margin-left: auto; margin-right: auto;">まとめ</h2>
     <div class="content-area">
         <ul style="list-style: none; padding: 0; display: inline-block; text-align: left;">
